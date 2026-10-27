@@ -2,7 +2,7 @@
 
 Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela toca e um commit `F00: ...`.
 
-- [ ] T1 Aceitação vermelha. `backend/pyproject.toml` (dependências e ferramentas), app FastAPI vazio, `conftest` com banco de teste,
+- [x] T1 Aceitação vermelha. `backend/pyproject.toml` (dependências e ferramentas), app FastAPI vazio, `conftest` com banco de teste,
       `tests/acceptance/F00/` lendo `specs/F00-esqueleto/acceptance.feature` e passos escritos.
       Pronto quando: `make test-slice F=F00` coleta todos os cenários e **todos falham** nas asserções (nenhum erro de coleta).
 - [ ] T2 Infra local. Dockerfiles, compose com healthchecks, Keycloak 26 com realm exportado, `.env.example` completo,
