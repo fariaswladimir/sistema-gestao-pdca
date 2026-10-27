@@ -1,12 +1,29 @@
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
+from app.api import saude
+from app.banco import criar_engine, criar_fabrica
 from app.config import Configuracao, obter_configuracao
+from app.logs import configurar_logs, middleware_request_id
 
 
 def criar_app(config: Configuracao | None = None) -> FastAPI:
     config = config or obter_configuracao()
-    app = FastAPI(title="Sistema de Gestão PDCA e SDCA", version=config.app_version)
+    configurar_logs(json=config.log_json)
+
+    @asynccontextmanager
+    async def ciclo_de_vida(app: FastAPI) -> AsyncGenerator[None]:
+        engine = criar_engine(config.database_url)
+        app.state.fabrica_sessao = criar_fabrica(engine)
+        yield
+        await engine.dispose()
+
+    app = FastAPI(title="Sistema de Gestão PDCA e SDCA", version=config.app_version, lifespan=ciclo_de_vida)
     app.state.config = config
+    app.middleware("http")(middleware_request_id)
+    app.include_router(saude.router)
     return app
 
 
