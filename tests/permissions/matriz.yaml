@@ -1,0 +1,188 @@
+# Matriz executável de permissões (espelha specs/_perfis-permissoes.md).
+# esperado: permitido | negado | rascunho | proprias
+# O gerador cria, para cada linha, testes com usuário do setor próprio e de setor alheio.
+
+setor:gerir:
+  admin: permitido
+  escritorio: permitido
+  diretoria: negado
+  gestor: negado
+  colaborador: negado
+  leitor: negado
+  servico: negado
+colaborador:gerir:
+  admin: permitido
+  escritorio: permitido
+  diretoria: negado
+  gestor: negado
+  colaborador: negado
+  leitor: negado
+  servico: negado
+tipo_indicador:gerir:
+  admin: negado
+  escritorio: permitido
+  diretoria: negado
+  gestor: negado
+  colaborador: negado
+  leitor: negado
+  servico: negado
+objetivo:gerir:
+  admin: negado
+  escritorio: permitido
+  diretoria: permitido
+  gestor: negado
+  colaborador: negado
+  leitor: negado
+  servico: negado
+indicador:criar_estrategico:
+  admin: negado
+  escritorio: permitido
+  diretoria: permitido
+  gestor: negado
+  colaborador: negado
+  leitor: negado
+  servico: negado
+indicador:desdobrar:
+  admin: negado
+  escritorio: permitido
+  diretoria: permitido
+  gestor: permitido
+  colaborador: negado
+  leitor: negado
+  servico: negado
+indicador:ler:
+  admin: permitido
+  escritorio: permitido
+  diretoria: permitido
+  gestor: permitido
+  colaborador: permitido
+  leitor: permitido
+  servico: permitido
+meta:aceitar:
+  admin: negado
+  escritorio: negado
+  diretoria: permitido
+  gestor: permitido
+  colaborador: permitido
+  leitor: negado
+  servico: negado
+medicao:registrar:
+  admin: negado
+  escritorio: permitido
+  diretoria: negado
+  gestor: permitido
+  colaborador: permitido
+  leitor: negado
+  servico: permitido
+anomalia:criar:
+  admin: negado
+  escritorio: permitido
+  diretoria: negado
+  gestor: permitido
+  colaborador: permitido
+  leitor: negado
+  servico: rascunho
+anomalia:editar:
+  admin: negado
+  escritorio: permitido
+  diretoria: negado
+  gestor: permitido
+  colaborador: permitido
+  leitor: negado
+  servico: rascunho
+anomalia:aprovar:
+  admin: negado
+  escritorio: permitido
+  diretoria: negado
+  gestor: permitido
+  colaborador: negado
+  leitor: negado
+  servico: negado
+plano:gerir:
+  admin: negado
+  escritorio: permitido
+  diretoria: negado
+  gestor: permitido
+  colaborador: negado
+  leitor: negado
+  servico: rascunho
+acao:atualizar:
+  admin: negado
+  escritorio: permitido
+  diretoria: negado
+  gestor: permitido
+  colaborador: proprias
+  leitor: negado
+  servico: negado
+padrao:gerir:
+  admin: negado
+  escritorio: permitido
+  diretoria: negado
+  gestor: permitido
+  colaborador: negado
+  leitor: negado
+  servico: rascunho
+dto:registrar:
+  admin: negado
+  escritorio: permitido
+  diretoria: negado
+  gestor: permitido
+  colaborador: negado
+  leitor: negado
+  servico: negado
+ritual:conduzir:
+  admin: negado
+  escritorio: permitido
+  diretoria: permitido
+  gestor: permitido
+  colaborador: negado
+  leitor: negado
+  servico: rascunho
+diagnostico:avaliar:
+  admin: negado
+  escritorio: permitido
+  diretoria: negado
+  gestor: negado
+  colaborador: negado
+  leitor: negado
+  servico: negado
+diagnostico:ler:
+  admin: permitido
+  escritorio: permitido
+  diretoria: permitido
+  gestor: permitido
+  colaborador: permitido
+  leitor: negado
+  servico: permitido
+integracao:gerir:
+  admin: permitido
+  escritorio: negado
+  diretoria: negado
+  gestor: negado
+  colaborador: negado
+  leitor: negado
+  servico: negado
+credencial_api:gerir:
+  admin: permitido
+  escritorio: negado
+  diretoria: negado
+  gestor: negado
+  colaborador: negado
+  leitor: negado
+  servico: negado
+auditoria:ler:
+  admin: permitido
+  escritorio: permitido
+  diretoria: permitido
+  gestor: negado
+  colaborador: negado
+  leitor: negado
+  servico: negado
+painel:ler:
+  admin: permitido
+  escritorio: permitido
+  diretoria: permitido
+  gestor: permitido
+  colaborador: permitido
+  leitor: permitido
+  servico: permitido

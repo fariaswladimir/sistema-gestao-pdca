@@ -1,0 +1,25 @@
+{
+  "_comentario": "Exemplo. No Antigravity: painel do Agent → ⋯ → MCP Servers → Manage MCP Servers → View raw config. Copie as entradas que usar e troque os valores entre <>. Nunca versione tokens.",
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {"GITHUB_PERSONAL_ACCESS_TOKEN": "<token>"}
+    },
+    "postgres-dev": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://gestao:gestao_dev@localhost:5432/gestao"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "atlassian": {
+      "serverUrl": "https://mcp.atlassian.com/v1/sse"
+    },
+    "gestao-pdca-local": {
+      "_comentario": "Disponível a partir da F07: o próprio sistema como servidor MCP, para testar como usuário de IA.",
+      "serverUrl": "http://localhost:8000/mcp"
+    }
+  }
+}

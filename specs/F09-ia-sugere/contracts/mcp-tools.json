@@ -1,0 +1,79 @@
+{
+  "herda": "F07-mcp-leitura/contracts/mcp-tools.json",
+  "ferramentas": [
+    {
+      "name": "registrar_medicao",
+      "description": "Registra o valor de um indicador manual no período. Correção de período já lançado exige justificativa.",
+      "acao": "medicao:registrar",
+      "escrita": true,
+      "inputSchema": {
+        "type": "object",
+        "required": ["indicador_id", "periodo", "valor"],
+        "properties": {
+          "indicador_id": {"type": "string"},
+          "periodo": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}$"},
+          "valor": {"type": "number"},
+          "justificativa": {"type": "string"}
+        }
+      }
+    },
+    {
+      "name": "abrir_anomalia",
+      "description": "Abre uma anomalia em rascunho ligada a um indicador e período.",
+      "acao": "anomalia:criar",
+      "escrita": true,
+      "inputSchema": {
+        "type": "object",
+        "required": ["indicador_id", "periodo", "titulo"],
+        "properties": {
+          "indicador_id": {"type": "string"},
+          "periodo": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}$"},
+          "titulo": {"type": "string", "maxLength": 140},
+          "descricao": {"type": "string"}
+        }
+      }
+    },
+    {
+      "name": "sugerir_causas",
+      "description": "Sugere causas prováveis (6M) para uma anomalia, citando anomalias, lições e POPs usados como evidência. Cria sugestão pendente.",
+      "acao": "anomalia:editar",
+      "escrita": true,
+      "inputSchema": {
+        "type": "object",
+        "required": ["anomalia_id"],
+        "properties": {
+          "anomalia_id": {"type": "string"},
+          "maximo": {"type": "integer", "minimum": 1, "maximum": 5, "default": 5}
+        }
+      }
+    },
+    {
+      "name": "criar_plano_acao",
+      "description": "Rascunha um plano de ação a partir da causa raiz aprovada. O plano nasce em rascunho.",
+      "acao": "plano:gerir",
+      "escrita": true,
+      "inputSchema": {
+        "type": "object",
+        "required": ["anomalia_id"],
+        "properties": {
+          "anomalia_id": {"type": "string"},
+          "orientacoes": {"type": "string", "description": "Restrições ou preferências do gestor"}
+        }
+      }
+    },
+    {
+      "name": "preparar_ritual",
+      "description": "Gera a pauta por exceção de um ritual agendado e, se já houver anotações, um rascunho de ata.",
+      "acao": "ritual:conduzir",
+      "escrita": true,
+      "inputSchema": {
+        "type": "object",
+        "required": ["ritual_id"],
+        "properties": {
+          "ritual_id": {"type": "string"},
+          "incluir_ata": {"type": "boolean", "default": false}
+        }
+      }
+    }
+  ]
+}

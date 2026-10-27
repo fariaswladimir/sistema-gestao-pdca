@@ -1,0 +1,19 @@
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks: [{id: gitleaks}]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks: [{id: ruff, args: [--fix]}, {id: ruff-format}]
+  - repo: local
+    hooks:
+      - id: migracoes-imutaveis
+        name: Bloquear edição de migrações já versionadas
+        entry: bash -c 'git diff --cached --name-status | grep -E "^M\s+backend/migrations/versions/" && echo "Não edite migração existente; crie outra." && exit 1 || exit 0'
+        language: system
+        pass_filenames: false
+      - id: specs-aprovadas-protegidas
+        name: Avisar mudança em spec aprovada
+        entry: bash -c 'for f in $(git diff --cached --name-only | grep -E "specs/F[0-9]{2}.*/(spec.md|acceptance.feature)$"); do grep -q "Status: Aprovada" "$f" 2>/dev/null && echo "ATENÇÃO: $f está aprovada; confirme que o humano aprovou a mudança."; done; exit 0'
+        language: system
+        pass_filenames: false
