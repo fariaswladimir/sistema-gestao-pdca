@@ -13,7 +13,7 @@
 | Consolidação | Como os filhos compõem o pai: soma, media, media_ponderada, ultimo, nenhuma. |
 | Medição | Valor de um indicador em um período. |
 | Farol | Situação do indicador no período: verde, amarelo, vermelho, sem_dado. |
-| Tolerância | Faixa que define amarelo. [SUPOSIÇÃO] padrão 5% da meta, configurável por indicador. |
+| Tolerância | Faixa que define amarelo. Padrão 5% da meta, configurável por indicador. |
 | Aceite de meta | Confirmação formal da meta pelo responsável e pelo gestor. |
 | Anomalia | Registro de resultado fora do alvo (ou problema na rotina) que exige análise de causa. |
 | 6M | Categorias da espinha de peixe: método, máquina, mão de obra, material, medida, meio ambiente. |

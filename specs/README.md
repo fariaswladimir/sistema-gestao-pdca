@@ -17,7 +17,7 @@ Documentos transversais: `_glossario.md`, `_modelo-dados.md`, `_perfis-permissoe
 
 | Fatia | Release | Nome | Status |
 | --- | --- | --- | --- |
-| F00 | R0 Esqueleto | Esqueleto andante | Rascunho |
+| F00 | R0 Esqueleto | Esqueleto andante | Aprovada |
 | F01 | R1 MVP PDCA | Meta e farol | Rascunho |
 | F02 | R1 MVP PDCA | Desdobramento e aceite | Rascunho |
 | F03 | R1 MVP PDCA | Anomalia e plano de ação | Rascunho |

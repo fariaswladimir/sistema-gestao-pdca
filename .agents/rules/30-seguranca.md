@@ -6,7 +6,7 @@ description: Aplicar ao criar ou alterar endpoints, ferramentas MCP, consultas, 
 # Segurança, perfis e auditoria
 
 - Perfis: admin, escritorio, diretoria, gestor, colaborador, leitor, servico. Matriz em @specs/_perfis-permissoes.md.
-- Autenticação: OIDC (Keycloak local; Microsoft Entra ID em produção). API externa: OAuth 2.0 client credentials
+- Autenticação: OIDC via Keycloak em todos os ambientes; na v1, usuários com login e senha próprios no Keycloak (sem SSO corporativo; federação com Entra ID fica para depois). API externa: OAuth 2.0 client credentials
   com escopos. MCP: OAuth com o token do usuário conectado; a IA herda exatamente as permissões dele.
 - Toda rota nova: dependência de permissão + teste positivo e negativo na matriz.
 - Toda consulta de listagem aplica `escopo_setores`. Teste com usuário de outro setor é obrigatório.

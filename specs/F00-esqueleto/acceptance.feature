@@ -28,6 +28,7 @@ Funcionalidade: Esqueleto andante
       | 85    | verde    |
       | 80    | verde    |
       | 77    | amarelo  |
+      | 76    | amarelo  |
       | 75.9  | vermelho |
 
   Cenário: relançar o mesmo período exige justificativa
