@@ -28,7 +28,7 @@ def banco_de_testes() -> Iterator[str]:
     if url:
         yield url_sync(url)
         return
-    from testcontainers.postgres import PostgresContainer
+    from testcontainers.community.postgres import PostgresContainer
 
     with PostgresContainer(IMAGEM_POSTGRES, driver="psycopg") as pg:
         yield pg.get_connection_url()

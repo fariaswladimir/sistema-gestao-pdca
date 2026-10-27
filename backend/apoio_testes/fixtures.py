@@ -1,4 +1,4 @@
-"""Fixtures compartilhadas por aceitação, permissões e contrato: API real + Postgres real."""
+"""Fixtures compartilhadas (plugin pytest): API real + Postgres real."""
 
 from collections.abc import Iterator
 from datetime import UTC, datetime

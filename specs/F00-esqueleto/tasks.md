@@ -8,7 +8,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
 - [ ] T2 Infra local. Dockerfiles, compose com healthchecks, Keycloak 26 com realm exportado, `.env.example` completo,
       correções do `Makefile`, `GET /saude` com versão e checagem do banco.
       Pronto quando: `make up` sobe db, keycloak, api, worker e web; `curl localhost:8000/saude` dá 200; cenário "saúde" verde.
-- [ ] T3 Modelos e migração inicial. Tabelas e extensões do plano, UUID v7, `NUMERIC`.
+- [x] T3 Modelos e migração inicial. Tabelas e extensões do plano, UUID v7, `NUMERIC`.
       Pronto quando: `make migrate` cria tudo; teste de integração sobe e desce a migração (`downgrade base`) sem erro.
 - [ ] T4 Seed idempotente e usuários do realm de dev.
       Pronto quando: `make seed` duas vezes seguidas não duplica nada; ana e bruno entram no Keycloak local.
