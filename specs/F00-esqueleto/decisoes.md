@@ -29,3 +29,5 @@
 | 2026-10-28 | Chamadas à API só no servidor (Server Components e Server Actions); `id_token` fica só no cookie criptografado, fora da sessão. | O access token aparece em `/api/auth/session` (padrão do Auth.js, vida de 5 min); o `id_token` serve só ao logout. TODO: avaliar tirar o access token da sessão. |
 | 2026-10-28 | Logout encerra a sessão do Keycloak com `id_token_hint`. | Sem ele, o Keycloak pede confirmação e o próximo login entraria sem senha. |
 | 2026-10-28 | `npm run dev` direto no Windows exige `127.0.0.1 keycloak.localhost` no arquivo hosts; no Docker e no Playwright funciona sem isso. | O Node no Windows não resolve `*.localhost`; navegadores e o DNS do Docker resolvem. |
+| 2026-10-28 | O campo de justificativa aparece quando o período atual já tem valor ou quando a API responde `justificativa_obrigatoria`; a regra continua só na API. | A tela não duplica a RN3; para períodos passados ela aprende com a resposta. |
+| 2026-10-28 | O E2E zera `medicao`, `evento_auditoria` e `fila_tarefa` do compose antes de rodar (`E2E_SEM_RESET=1` desliga). | Bateria repetível; nunca apontar o E2E para homologação ou produção sem essa variável. |

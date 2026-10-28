@@ -31,7 +31,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
       Pronto quando: `make test-contract` verde.
 - [x] T13 Web: base e login. Next.js + Tailwind, Auth.js com Keycloak, cliente gerado do OpenAPI, lint e typecheck.
       Pronto quando: no navegador, `/` sem sessão vai ao login do Keycloak e, após entrar como ana, mostra `/meus-indicadores` com o nome dela.
-- [ ] T14 Web: Meus indicadores. Componente `Farol` (cor + ícone + texto), cartões e `LancarMedicao`.
+- [x] T14 Web: Meus indicadores. Componente `Farol` (cor + ícone + texto), cartões e `LancarMedicao`.
       Pronto quando: `make e2e` verde (login → lançar → ver farol; relançar sem justificativa → erro; sem login → login).
 - [ ] T15 CI. Jobs `check`, `e2e` (com compose) e `publicar` (imagens no GHCR).
       Pronto quando: um PR mostra `check` e `e2e` verdes; um push na `main` publica as imagens com o SHA como tag.
