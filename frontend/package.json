@@ -1,0 +1,34 @@
+{
+  "name": "gestao-pdca-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "gerar-cliente-api": "openapi-typescript http://localhost:8000/openapi.json -o lib/api/esquema.d.ts",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "next": "16.4.3",
+    "next-auth": "5.0.0-beta.32",
+    "openapi-fetch": "0.17.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "22.20.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.3",
+    "openapi-typescript": "7.13.0",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3"
+  }
+}

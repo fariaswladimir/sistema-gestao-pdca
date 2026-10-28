@@ -25,3 +25,7 @@
 | 2026-10-28 | `periodo` validado no contrato (`^[1-9]\d{3}-(0[1-9]\|1[0-2])$`). | Ano 0000 passava pelo formato e quebrava em `date(0, ...)` (seria 500). |
 | 2026-10-28 | `valor` documentado como número entre ±99.999.999.999.999 e arredondado para 4 casas (meio para cima). | Cabe em `NUMERIC(18,4)`; o `Decimal` do Pydantic aparecia no contrato como "número ou texto". |
 | 2026-10-28 | Ruff com `line-length 110` em `backend/`, `tests/` e `conftest.py`; migrações geradas ficam fora do lint. | Migrações são imutáveis; reformatar uma já aplicada violaria a regra 8. |
+| 2026-10-28 | Web: Next.js 16.4, React 19, Tailwind 4, Auth.js `5.0.0-beta.32` (versões fixas), TypeScript 5.9 e ESLint 9. | Auth.js 5 ainda é beta, mas declara suporte ao Next 16; TypeScript 7 (reescrita em Go) ficou de fora por risco com ferramentas. |
+| 2026-10-28 | Chamadas à API só no servidor (Server Components e Server Actions); `id_token` fica só no cookie criptografado, fora da sessão. | O access token aparece em `/api/auth/session` (padrão do Auth.js, vida de 5 min); o `id_token` serve só ao logout. TODO: avaliar tirar o access token da sessão. |
+| 2026-10-28 | Logout encerra a sessão do Keycloak com `id_token_hint`. | Sem ele, o Keycloak pede confirmação e o próximo login entraria sem senha. |
+| 2026-10-28 | `npm run dev` direto no Windows exige `127.0.0.1 keycloak.localhost` no arquivo hosts; no Docker e no Playwright funciona sem isso. | O Node no Windows não resolve `*.localhost`; navegadores e o DNS do Docker resolvem. |

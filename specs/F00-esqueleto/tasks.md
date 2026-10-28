@@ -29,7 +29,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
       Pronto quando: `make test-perms` verde para os 7 perfis × 2 ações × (próprio, de outro responsável).
 - [x] T12 Contrato da API. Schemathesis sobre `/openapi.json`.
       Pronto quando: `make test-contract` verde.
-- [ ] T13 Web: base e login. Next.js + Tailwind, Auth.js com Keycloak, cliente gerado do OpenAPI, lint e typecheck.
+- [x] T13 Web: base e login. Next.js + Tailwind, Auth.js com Keycloak, cliente gerado do OpenAPI, lint e typecheck.
       Pronto quando: no navegador, `/` sem sessão vai ao login do Keycloak e, após entrar como ana, mostra `/meus-indicadores` com o nome dela.
 - [ ] T14 Web: Meus indicadores. Componente `Farol` (cor + ícone + texto), cartões e `LancarMedicao`.
       Pronto quando: `make e2e` verde (login → lançar → ver farol; relançar sem justificativa → erro; sem login → login).
