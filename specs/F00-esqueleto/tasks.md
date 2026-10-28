@@ -5,7 +5,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
 - [x] T1 Aceitação vermelha. `backend/pyproject.toml` (dependências e ferramentas), app FastAPI vazio, `conftest` com banco de teste,
       `tests/acceptance/F00/` lendo `specs/F00-esqueleto/acceptance.feature` e passos escritos.
       Pronto quando: `make test-slice F=F00` coleta todos os cenários e **todos falham** nas asserções (nenhum erro de coleta).
-- [ ] T2 Infra local. Dockerfiles, compose com healthchecks, Keycloak 26 com realm exportado, `.env.example` completo,
+- [x] T2 Infra local. Dockerfiles, compose com healthchecks, Keycloak 26 com realm exportado, `.env.example` completo,
       correções do `Makefile`, `GET /saude` com versão e checagem do banco.
       Pronto quando: `make up` sobe db, keycloak, api, worker e web; `curl localhost:8000/saude` dá 200; cenário "saúde" verde.
 - [x] T3 Modelos e migração inicial. Tabelas e extensões do plano, UUID v7, `NUMERIC`.

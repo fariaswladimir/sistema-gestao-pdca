@@ -10,3 +10,6 @@
 | 2026-10-27 | Enums gravados como texto com CHECK, sem tipo nativo do Postgres. | Acrescentar valor (ex.: `importacao` na F10) vira troca de CHECK, sem `ALTER TYPE`. |
 | 2026-10-27 | `pytest.ini` e `conftest.py` na raiz, fixtures no plugin `backend/apoio_testes/fixtures.py`. | Um único rootdir para `backend/tests` e `tests/`; pytest-bdd lê a feature direto de `specs/`. |
 | 2026-10-27 | Dados de teste montados por SQL direto (`apoio_testes/dados.py`), não pelo código da aplicação. | Aceitação continua caixa-preta: um bug no serviço não contamina o arranjo do teste. |
+| 2026-10-28 | Keycloak atende como `keycloak.localhost:8080` (apelido de rede no compose). | Navegadores resolvem `*.localhost` para 127.0.0.1 e o DNS do Docker resolve o apelido: emissor único para navegador, web e API, sem editar o arquivo hosts. |
+| 2026-10-28 | T2 validada com db, keycloak e api; `worker` e `web` sobem a partir da T10 e da T13. | O código desses serviços é dessas tarefas; o compose já os declara. |
+| 2026-10-28 | Makefile chama ferramentas via `$(PYTHON) -m` e roda o pytest a partir da raiz. | Funciona com venv ativo, com `PYTHON=` explícito no Windows e no CI. |

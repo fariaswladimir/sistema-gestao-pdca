@@ -1,0 +1,156 @@
+{
+  "realm": "gestao",
+  "enabled": true,
+  "displayName": "Sistema de Gestão PDCA",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": true,
+  "rememberMe": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "bruteForceProtected": true,
+  "failureFactor": 5,
+  "waitIncrementSeconds": 60,
+  "maxFailureWaitSeconds": 900,
+  "passwordPolicy": "length(10) and notUsername",
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 28800,
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "pt-BR"
+  ],
+  "defaultLocale": "pt-BR",
+  "clients": [
+    {
+      "clientId": "gestao-web",
+      "name": "Sistema de Gestão (web)",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "gestao-web-dev",
+      "clientAuthenticatorType": "client-secret",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3000"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3000/*"
+      },
+      "protocol": "openid-connect",
+      "protocolMappers": [
+        {
+          "name": "audiencia-gestao-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "gestao-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "profile",
+        "email",
+        "basic"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "ana",
+      "email": "ana@exemplo.org",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Ana",
+      "lastName": "Exemplo",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "senha-dev-123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "bruno",
+      "email": "bruno@exemplo.org",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Bruno",
+      "lastName": "Exemplo",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "senha-dev-123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "carlos",
+      "email": "carlos@exemplo.org",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Carlos",
+      "lastName": "Exemplo",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "senha-dev-123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "duda",
+      "email": "duda@exemplo.org",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Duda",
+      "lastName": "Exemplo",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "senha-dev-123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "eva",
+      "email": "eva@exemplo.org",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Eva",
+      "lastName": "Exemplo",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "senha-dev-123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "root",
+      "email": "root@exemplo.org",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Root",
+      "lastName": "Exemplo",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "senha-dev-123",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

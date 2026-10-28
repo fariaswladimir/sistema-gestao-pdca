@@ -1,3 +1,6 @@
+# Ambiente local. O Keycloak atende como keycloak.localhost:8080 dentro e fora do Docker
+# (navegadores resolvem *.localhost para 127.0.0.1; na rede do compose o apelido aponta para o contêiner),
+# então o emissor dos tokens é o mesmo para o navegador, a web e a API.
 services:
   db:
     image: pgvector/pgvector:pg16
@@ -7,28 +10,56 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-gestao_dev}
     ports: ["5432:5432"]
     volumes: [dbdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gestao -d gestao"]
+      interval: 5s
+      retries: 20
+
   keycloak:
-    image: quay.io/keycloak/keycloak:25.0
+    image: quay.io/keycloak/keycloak:26.0
     command: start-dev --import-realm
     environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin_dev}
-    volumes: ["./infra/keycloak:/opt/keycloak/data/import"]
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin_dev}
+      KC_HOSTNAME: http://keycloak.localhost:8080
+      KC_HEALTH_ENABLED: "true"
+    volumes: ["./infra/keycloak:/opt/keycloak/data/import:ro"]
     ports: ["8080:8080"]
+    networks:
+      default:
+        aliases: [keycloak.localhost]
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9000 && printf 'GET /health/ready HTTP/1.0\\r\\n\\r\\n' >&3 && grep -q UP <&3"]
+      interval: 10s
+      retries: 30
+
   api:
-    build: ./backend
+    build:
+      context: ./backend
+      args: {APP_VERSION: "${APP_VERSION:-dev}"}
     env_file: .env
-    depends_on: [db, keycloak]
+    depends_on:
+      db: {condition: service_healthy}
+      keycloak: {condition: service_healthy}
     ports: ["8000:8000"]
+
   worker:
-    build: ./backend
+    build:
+      context: ./backend
+      args: {APP_VERSION: "${APP_VERSION:-dev}"}
     command: python -m app.motor.worker
     env_file: .env
-    depends_on: [db]
+    depends_on:
+      db: {condition: service_healthy}
+    healthcheck: {disable: true}
+
   web:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args: {APP_VERSION: "${APP_VERSION:-dev}"}
     env_file: .env
     depends_on: [api]
     ports: ["3000:3000"]
+
 volumes:
   dbdata:
