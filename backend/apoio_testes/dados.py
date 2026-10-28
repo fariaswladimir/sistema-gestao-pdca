@@ -25,7 +25,13 @@ def colaborador(con: Connection, login: str, setor_id: Any, perfil: str = "colab
     email = f"{login}@exemplo.org"
     existente = con.execute(text("select id from colaborador where email = :e"), {"e": email}).scalar()
     return existente or _inserir(
-        con, "colaborador", nome=login.capitalize(), email=email, setor_id=setor_id, perfil=perfil, status="ativo"
+        con,
+        "colaborador",
+        nome=login.capitalize(),
+        email=email,
+        setor_id=setor_id,
+        perfil=perfil,
+        status="ativo",
     )
 
 

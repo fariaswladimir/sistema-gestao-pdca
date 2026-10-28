@@ -51,7 +51,10 @@ def reverter_migracoes(url: str, revisao: str = "base") -> None:
 def limpar(engine: Engine) -> None:
     with engine.begin() as con:
         tabelas = con.execute(
-            text("select tablename from pg_tables where schemaname = 'public' and tablename <> 'alembic_version'")
+            text(
+                "select tablename from pg_tables"
+                " where schemaname = 'public' and tablename <> 'alembic_version'"
+            )
         ).scalars()
         nomes = ", ".join(f'"{t}"' for t in tabelas)
         if nomes:

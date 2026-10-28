@@ -4,9 +4,10 @@ from collections.abc import Iterator
 from datetime import UTC, datetime
 
 import pytest
-from apoio_testes import banco, tokens
 from fastapi.testclient import TestClient
 from sqlalchemy import Engine, create_engine
+
+from apoio_testes import banco, tokens
 
 # Data congelada dos testes: período atual = 2026-10.
 AGORA = datetime(2026, 10, 15, 12, 0, tzinfo=UTC)
@@ -52,9 +53,10 @@ def cliente(url_banco: str) -> Iterator[TestClient]:
         app_version="teste",
     )
     app = criar_app(config)
-    validador = ValidadorToken(emissor=tokens.EMISSOR, audiencia=tokens.AUDIENCIA, obter_jwks=lambda forcar=False: tokens.jwks())
+    validador = ValidadorToken(
+        emissor=tokens.EMISSOR, audiencia=tokens.AUDIENCIA, obter_jwks=lambda forcar=False: tokens.jwks()
+    )
     app.dependency_overrides[obter_validador] = lambda: validador
     app.dependency_overrides[obter_relogio] = lambda: RelogioFixo(AGORA)
     with TestClient(app) as c:
         yield c
-

@@ -1,9 +1,9 @@
 from typing import Any
 
 import pytest
-from apoio_testes import tokens
 from cryptography.hazmat.primitives.asymmetric import rsa
 
+from apoio_testes import tokens
 from app.dominio.erros import NaoAutenticado
 from app.seguranca.autenticacao import ValidadorToken
 
@@ -28,10 +28,14 @@ async def test_token_valido_devolve_claims() -> None:
     "token",
     [
         pytest.param(lambda: tokens.emitir_token("s", "e@x", expira_em_s=-60), id="expirado"),
-        pytest.param(lambda: tokens.emitir_token("s", "e@x", emissor="http://outro/realms/x"), id="emissor-errado"),
+        pytest.param(
+            lambda: tokens.emitir_token("s", "e@x", emissor="http://outro/realms/x"), id="emissor-errado"
+        ),
         pytest.param(lambda: tokens.emitir_token("s", "e@x", audiencia="outra-api"), id="audiencia-errada"),
         pytest.param(
-            lambda: tokens.emitir_token("s", "e@x", chave=rsa.generate_private_key(public_exponent=65537, key_size=2048)),
+            lambda: tokens.emitir_token(
+                "s", "e@x", chave=rsa.generate_private_key(public_exponent=65537, key_size=2048)
+            ),
             id="assinatura-invalida",
         ),
         pytest.param(lambda: "nao-e-um-jwt", id="malformado"),

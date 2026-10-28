@@ -1,8 +1,10 @@
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Request, Response
+from fastapi import APIRouter, Depends, Path, Request, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.erros import CORPO_MALFORMADO, NAO_ENCONTRADO, RESPOSTAS_AUTENTICADAS, ErroSaida
 from app.banco import sessao_db
 from app.esquemas.indicadores import IndicadorDetalhe, IndicadorResumo, MedicaoEntrada, MedicaoSaida
 from app.relogio import Relogio, obter_relogio
@@ -11,7 +13,11 @@ from app.seguranca.permissoes import exigir_permissao
 from app.servicos.indicadores import ServicoIndicadores
 from app.servicos.medicoes import ServicoMedicoes
 
-router = APIRouter(prefix="/indicadores", tags=["indicadores"])
+Periodo = Annotated[
+    str, Path(pattern=r"^[1-9]\d{3}-(0[1-9]|1[0-2])$", description="AAAA-MM", examples=["2026-10"])
+]
+
+router = APIRouter(prefix="/indicadores", tags=["indicadores"], responses=RESPOSTAS_AUTENTICADAS)
 
 
 @router.get("/meus", response_model=list[IndicadorResumo])
@@ -24,7 +30,7 @@ async def listar_meus(
     return await ServicoIndicadores(sessao, usuario, relogio, request.app.state.config).listar_meus()
 
 
-@router.get("/{indicador_id}", response_model=IndicadorDetalhe, responses={404: {"description": "Não encontrado"}})
+@router.get("/{indicador_id}", response_model=IndicadorDetalhe, responses=NAO_ENCONTRADO)
 async def detalhar(
     indicador_id: UUID,
     request: Request,
@@ -40,14 +46,15 @@ async def detalhar(
     response_model=MedicaoSaida,
     responses={
         201: {"model": MedicaoSaida, "description": "Medição criada"},
-        404: {"description": "Não encontrado"},
-        409: {"description": "Lançamento simultâneo"},
-        422: {"description": "Entrada inválida ou justificativa ausente"},
+        **CORPO_MALFORMADO,
+        **NAO_ENCONTRADO,
+        409: {"model": ErroSaida, "description": "Lançamento simultâneo no mesmo período"},
+        422: {"model": ErroSaida, "description": "Entrada inválida ou justificativa ausente"},
     },
 )
 async def registrar_medicao(
     indicador_id: UUID,
-    periodo: str,
+    periodo: Periodo,
     entrada: MedicaoEntrada,
     request: Request,
     response: Response,

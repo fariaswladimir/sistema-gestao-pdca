@@ -1,4 +1,4 @@
-"""Worker da fila (`fila_tarefa`). Vários workers podem rodar juntos: cada tarefa é travada com SKIP LOCKED."""
+"""Worker da fila (`fila_tarefa`). Vários workers podem rodar juntos: cada tarefa é travada (SKIP LOCKED)."""
 
 import asyncio
 from collections.abc import Awaitable, Callable
@@ -60,7 +60,9 @@ async def _executar(sessao: AsyncSession, tarefa: FilaTarefa) -> None:
         tarefa.status = StatusTarefa.concluida
     except Exception:
         tarefa.tentativas += 1
-        log.exception("tarefa_falhou", tipo=tarefa.tipo, tarefa_id=str(tarefa.id), tentativas=tarefa.tentativas)
+        log.exception(
+            "tarefa_falhou", tipo=tarefa.tipo, tarefa_id=str(tarefa.id), tentativas=tarefa.tentativas
+        )
         if tarefa.tentativas >= MAX_TENTATIVAS:
             tarefa.status = StatusTarefa.falhou
         else:

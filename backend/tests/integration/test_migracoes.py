@@ -1,5 +1,6 @@
-from apoio_testes import banco
 from sqlalchemy import Engine, inspect, text
+
+from apoio_testes import banco
 
 TABELAS_F00 = {
     "setor",
@@ -19,7 +20,7 @@ def _tabelas(engine: Engine) -> set[str]:
 
 
 def test_migracao_cria_tabelas_e_extensoes(engine: Engine) -> None:
-    assert TABELAS_F00 <= _tabelas(engine)
+    assert _tabelas(engine) >= TABELAS_F00
     with engine.connect() as con:
         extensoes = set(con.execute(text("select extname from pg_extension")).scalars())
     assert {"ltree", "vector"} <= extensoes
@@ -31,4 +32,4 @@ def test_migracao_desce_e_sobe(url_banco: str, engine: Engine) -> None:
     assert _tabelas(engine) == set()
     banco.aplicar_migracoes(url_banco)
     engine.dispose()
-    assert TABELAS_F00 <= _tabelas(engine)
+    assert _tabelas(engine) >= TABELAS_F00

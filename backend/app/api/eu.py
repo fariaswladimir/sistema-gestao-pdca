@@ -3,10 +3,11 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
+from app.api.erros import RESPOSTAS_AUTENTICADAS
 from app.dominio.tipos import Perfil
 from app.seguranca.autenticacao import Usuario, usuario_atual
 
-router = APIRouter(tags=["sessao"])
+router = APIRouter(tags=["sessao"], responses=RESPOSTAS_AUTENTICADAS)
 
 
 class EuSaida(BaseModel):

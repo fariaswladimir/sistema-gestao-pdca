@@ -6,7 +6,7 @@ Os usuários espelham `infra/keycloak/realm-gestao.json` (mesmos e-mails).
 import asyncio
 from datetime import date
 from decimal import Decimal
-from typing import Any, TypeVar
+from typing import Any
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -25,8 +25,6 @@ from app.dominio.tipos import (
 )
 from app.modelos import Base, Ciclo, Colaborador, Indicador, Meta, Setor, TipoIndicador
 
-M = TypeVar("M", bound=Base)
-
 COLABORADORES = [
     ("ana", "Piloto", Perfil.colaborador),
     ("bruno", "Outro", Perfil.colaborador),
@@ -37,7 +35,9 @@ COLABORADORES = [
 ]
 
 
-async def _obter_ou_criar(sessao: AsyncSession, modelo: type[M], chave: dict[str, Any], **campos: Any) -> M:
+async def _obter_ou_criar[M: Base](
+    sessao: AsyncSession, modelo: type[M], chave: dict[str, Any], **campos: Any
+) -> M:
     existente = (await sessao.execute(select(modelo).filter_by(**chave))).scalar_one_or_none()
     if existente:
         return existente
@@ -66,7 +66,12 @@ async def semear_sessao(sessao: AsyncSession) -> None:
         for login, setor, perfil in COLABORADORES
     }
     ciclo = await _obter_ou_criar(
-        sessao, Ciclo, {"nome": "2026"}, inicio=date(2026, 1, 1), fim=date(2026, 12, 31), status=StatusCiclo.vigente
+        sessao,
+        Ciclo,
+        {"nome": "2026"},
+        inicio=date(2026, 1, 1),
+        fim=date(2026, 12, 31),
+        status=StatusCiclo.vigente,
     )
     tipo = await _obter_ou_criar(
         sessao,

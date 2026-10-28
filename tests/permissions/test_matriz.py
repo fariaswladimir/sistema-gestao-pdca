@@ -10,12 +10,12 @@ from typing import Any
 
 import pytest
 import yaml
-from apoio_testes import dados
-from apoio_testes.tokens import cabecalho
 from fastapi.routing import APIRoute
 from fastapi.testclient import TestClient
 from sqlalchemy import Engine
 
+from apoio_testes import dados
+from apoio_testes.tokens import cabecalho
 from app.dominio.tipos import Perfil
 from app.main import criar_app
 
@@ -91,7 +91,9 @@ def _chamar(cliente: TestClient, rota: RotaProtegida, login: str, indicador_id: 
 
 @pytest.mark.parametrize("perfil", list(Perfil), ids=lambda p: p.value)
 @pytest.mark.parametrize("rota", ROTAS, ids=str)
-def test_recurso_proprio(cliente: TestClient, arranjo: dict[str, Any], rota: RotaProtegida, perfil: Perfil) -> None:
+def test_recurso_proprio(
+    cliente: TestClient, arranjo: dict[str, Any], rota: RotaProtegida, perfil: Perfil
+) -> None:
     status = _chamar(cliente, rota, arranjo["login"], arranjo["proprio"])
     assert status in _esperado_proprio(rota.acao, perfil), f"{perfil} em {rota}: {status}"
 

@@ -6,12 +6,12 @@ from zoneinfo import ZoneInfo
 
 from app.dominio.erros import EntradaInvalida
 
-_FORMATO = re.compile(r"^(\d{4})-(\d{2})$")
+_FORMATO = re.compile(r"^([1-9]\d{3})-(0[1-9]|1[0-2])$")
 
 
 def de_texto(texto: str) -> date:
     casamento = _FORMATO.match(texto)
-    if not casamento or not 1 <= int(casamento.group(2)) <= 12:
+    if not casamento:
         raise EntradaInvalida(f"Período inválido: {texto!r}. Use AAAA-MM.")
     return date(int(casamento.group(1)), int(casamento.group(2)), 1)
 

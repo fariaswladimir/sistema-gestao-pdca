@@ -103,13 +103,17 @@ async def usuario_atual(
     colaborador = await _vincular(sessao, claims)
     if colaborador is None or colaborador.status != StatusColaborador.ativo:
         raise SemPermissao("Usuário sem cadastro ativo no sistema.")
-    return Usuario(id=colaborador.id, nome=colaborador.nome, perfil=colaborador.perfil, setor_id=colaborador.setor_id)
+    return Usuario(
+        id=colaborador.id, nome=colaborador.nome, perfil=colaborador.perfil, setor_id=colaborador.setor_id
+    )
 
 
 async def _vincular(sessao: AsyncSession, claims: dict[str, Any]) -> Colaborador | None:
     """Acha o colaborador pelo `sub`; no primeiro acesso, pelo e-mail verificado, gravando o `sub`."""
     sub = claims["sub"]
-    colaborador = (await sessao.execute(select(Colaborador).where(Colaborador.sub_oidc == sub))).scalar_one_or_none()
+    colaborador = (
+        await sessao.execute(select(Colaborador).where(Colaborador.sub_oidc == sub))
+    ).scalar_one_or_none()
     if colaborador or not claims.get("email_verified") or not claims.get("email"):
         return colaborador
     colaborador = (

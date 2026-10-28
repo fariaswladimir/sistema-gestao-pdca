@@ -1,4 +1,4 @@
-"""Matriz perfil × ação. Espelha specs/_perfis-permissoes.md e tests/permissions/matriz.yaml (teste de paridade).
+"""Matriz perfil × ação. Espelha specs/_perfis-permissoes.md e tests/permissions/matriz.yaml (há teste).
 
 Letras na ordem das colunas: admin, escritorio, diretoria, gestor, colaborador, leitor, servico.
 P permitido · N negado · R só rascunho · O só os próprios itens.
@@ -23,7 +23,15 @@ class Acesso(StrEnum):
     proprias = "proprias"
 
 
-_ORDEM = [Perfil.admin, Perfil.escritorio, Perfil.diretoria, Perfil.gestor, Perfil.colaborador, Perfil.leitor, Perfil.servico]
+_ORDEM = [
+    Perfil.admin,
+    Perfil.escritorio,
+    Perfil.diretoria,
+    Perfil.gestor,
+    Perfil.colaborador,
+    Perfil.leitor,
+    Perfil.servico,
+]
 _LETRAS = {"P": Acesso.permitido, "N": Acesso.negado, "R": Acesso.rascunho, "O": Acesso.proprias}
 
 _MATRIZ = {

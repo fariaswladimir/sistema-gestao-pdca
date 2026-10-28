@@ -22,7 +22,9 @@ def test_permissoes_py_igual_a_matriz_yaml() -> None:
 
 
 def test_matriz_cobre_todas_as_acoes_do_documento() -> None:
-    linhas = [linha for linha in DOC.read_text("utf-8").splitlines() if linha.startswith("| ") and ":" in linha]
+    linhas = [
+        linha for linha in DOC.read_text("utf-8").splitlines() if linha.startswith("| ") and ":" in linha
+    ]
     acoes_doc = {linha.split("|")[1].strip() for linha in linhas}
     assert acoes_doc == set(PERMISSOES)
 

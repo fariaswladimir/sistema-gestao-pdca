@@ -55,7 +55,9 @@ class Indicador(ComId, Base):
 
 class Meta(ComId, Base):
     __tablename__ = "meta"
-    __table_args__ = (UniqueConstraint("indicador_id", "ciclo_id", "periodo", postgresql_nulls_not_distinct=True),)
+    __table_args__ = (
+        UniqueConstraint("indicador_id", "ciclo_id", "periodo", postgresql_nulls_not_distinct=True),
+    )
 
     indicador_id: Mapped[UUID] = mapped_column(ForeignKey("indicador.id", ondelete="CASCADE"))
     ciclo_id: Mapped[UUID] = mapped_column(ForeignKey("ciclo.id", ondelete="RESTRICT"))

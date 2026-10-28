@@ -17,3 +17,12 @@ def test_relancamento_sem_justificativa_e_recusado(justificativa: str | None) ->
 
 def test_relancamento_com_justificativa() -> None:
     assert exigir_justificativa_se_relancamento(True, "  erro de digitação ") == "erro de digitação"
+
+
+def test_valor_arredondado_para_quatro_casas() -> None:
+    from decimal import Decimal
+
+    from app.esquemas.indicadores import MedicaoEntrada
+
+    assert MedicaoEntrada(valor=Decimal("75.12345")).valor == Decimal("75.1235")
+    assert MedicaoEntrada.model_json_schema()["properties"]["valor"]["type"] == "number"

@@ -3,12 +3,12 @@ from collections.abc import Iterator
 from typing import Any
 
 import pytest
-from apoio_testes import banco, dados
-from apoio_testes.tokens import cabecalho
 from fastapi.testclient import TestClient
 from sqlalchemy import Engine, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from apoio_testes import banco, dados
+from apoio_testes.tokens import cabecalho
 from app.banco import criar_engine, criar_fabrica
 from app.motor import worker
 
@@ -43,11 +43,15 @@ def _lancar(cliente: TestClient, engine: Engine) -> None:
     with engine.begin() as con:
         s = dados.setor(con, "Piloto")
         ind = dados.indicador(con, "IND-01", s, dados.colaborador(con, "ana", s))
-    resposta = cliente.put(f"/indicadores/{ind}/medicoes/2026-10", json={"valor": 70}, headers=cabecalho("ana"))
+    resposta = cliente.put(
+        f"/indicadores/{ind}/medicoes/2026-10", json={"valor": 70}, headers=cabecalho("ana")
+    )
     assert resposta.status_code == 201, resposta.text
 
 
-def test_medicao_registrada_vai_ao_outbox_e_e_concluida(cliente: TestClient, engine: Engine, url_banco: str) -> None:
+def test_medicao_registrada_vai_ao_outbox_e_e_concluida(
+    cliente: TestClient, engine: Engine, url_banco: str
+) -> None:
     _lancar(cliente, engine)
     [tarefa] = _tarefas(engine)
     assert (tarefa.tipo, tarefa.status) == ("MedicaoRegistrada", "pendente")

@@ -25,7 +25,9 @@ def criar_app(config: Configuracao | None = None) -> FastAPI:
     app = FastAPI(title="Sistema de Gestão PDCA e SDCA", version=config.app_version, lifespan=ciclo_de_vida)
     app.state.config = config
     app.state.validador = ValidadorToken(
-        emissor=config.oidc_issuer, audiencia=config.oidc_audience, obter_jwks=JwksRemoto(config.oidc_jwks_url)
+        emissor=config.oidc_issuer,
+        audiencia=config.oidc_audience,
+        obter_jwks=JwksRemoto(config.oidc_jwks_url),
     )
     registrar_tratamento_de_erros(app)
     app.middleware("http")(middleware_request_id)

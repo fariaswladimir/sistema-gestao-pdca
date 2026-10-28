@@ -29,12 +29,16 @@ def _retrato(m: Medicao) -> dict[str, str | None]:
 
 
 class ServicoMedicoes:
-    def __init__(self, sessao: AsyncSession, usuario: Usuario, relogio: Relogio, config: Configuracao) -> None:
+    def __init__(
+        self, sessao: AsyncSession, usuario: Usuario, relogio: Relogio, config: Configuracao
+    ) -> None:
         self.sessao = sessao
         self.usuario = usuario
         self.indicadores = ServicoIndicadores(sessao, usuario, relogio, config)
 
-    async def registrar(self, indicador_id: UUID, periodo_texto: str, entrada: MedicaoEntrada) -> tuple[MedicaoSaida, bool]:
+    async def registrar(
+        self, indicador_id: UUID, periodo_texto: str, entrada: MedicaoEntrada
+    ) -> tuple[MedicaoSaida, bool]:
         """Cria ou substitui a medição do período. Devolve (medição, criada?)."""
         periodo = periodos.de_texto(periodo_texto)
         indicador, polaridade = await self.indicadores.obter_visivel(indicador_id)
@@ -44,7 +48,9 @@ class ServicoMedicoes:
         meta = await self.indicadores.meta_do_periodo(indicador.id, periodo)
         farol = calcular_farol(entrada.valor, meta, polaridade, indicador.tolerancia_pct)
         existente = await self.sessao.scalar(
-            select(Medicao).where(Medicao.indicador_id == indicador.id, Medicao.periodo == periodo).with_for_update()
+            select(Medicao)
+            .where(Medicao.indicador_id == indicador.id, Medicao.periodo == periodo)
+            .with_for_update()
         )
         justificativa = exigir_justificativa_se_relancamento(existente is not None, entrada.justificativa)
 

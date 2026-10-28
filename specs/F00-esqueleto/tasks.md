@@ -27,7 +27,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
       Pronto quando: teste de integração mostra `MedicaoRegistrada` saindo de `pendente` para `concluida`.
 - [x] T11 Matriz executável. Gerador a partir de `matriz.yaml` e do registro rota → ação.
       Pronto quando: `make test-perms` verde para os 7 perfis × 2 ações × (próprio, de outro responsável).
-- [ ] T12 Contrato da API. Schemathesis sobre `/openapi.json`.
+- [x] T12 Contrato da API. Schemathesis sobre `/openapi.json`.
       Pronto quando: `make test-contract` verde.
 - [ ] T13 Web: base e login. Next.js + Tailwind, Auth.js com Keycloak, cliente gerado do OpenAPI, lint e typecheck.
       Pronto quando: no navegador, `/` sem sessão vai ao login do Keycloak e, após entrar como ana, mostra `/meus-indicadores` com o nome dela.

@@ -21,3 +21,7 @@
 | 2026-10-28 | Lançamento simultâneo no mesmo período responde 409. | A unicidade (indicador, período) no banco é a última barreira; o cliente recarrega e relança com justificativa. |
 | 2026-10-28 | A matriz de testes descobre as rotas pela ação marcada em `exigir_permissao`, em vez de um registro manual rota → ação. | Rota nova entra sozinha na matriz; sem exemplo de requisição, o teste falha e obriga a cobrir. |
 | 2026-10-28 | FastAPI 0.162: routers incluídos são `_IncludedRouter` e `ModelField` não tem `type_`; o gerador desce por `original_router` e lê `field_info.annotation`. | Mudança de API interna do FastAPI; se quebrar de novo numa atualização, o `test_ha_rotas_protegidas` acusa. |
+| 2026-10-28 | Envelope único de erro `{detalhe, erros?}` para erros de domínio, de validação (422) e do framework (400, 405), documentado no OpenAPI. | O Schemathesis apontou 401/403/400 não documentados e dois formatos de 422; o cliente da web passa a tratar um formato só. |
+| 2026-10-28 | `periodo` validado no contrato (`^[1-9]\d{3}-(0[1-9]\|1[0-2])$`). | Ano 0000 passava pelo formato e quebrava em `date(0, ...)` (seria 500). |
+| 2026-10-28 | `valor` documentado como número entre ±99.999.999.999.999 e arredondado para 4 casas (meio para cima). | Cabe em `NUMERIC(18,4)`; o `Decimal` do Pydantic aparecia no contrato como "número ou texto". |
+| 2026-10-28 | Ruff com `line-length 110` em `backend/`, `tests/` e `conftest.py`; migrações geradas ficam fora do lint. | Migrações são imutáveis; reformatar uma já aplicada violaria a regra 8. |

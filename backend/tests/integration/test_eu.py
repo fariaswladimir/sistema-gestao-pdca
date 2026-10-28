@@ -1,7 +1,8 @@
-from apoio_testes import dados
-from apoio_testes.tokens import cabecalho, emitir_token
 from fastapi.testclient import TestClient
 from sqlalchemy import Engine, text
+
+from apoio_testes import dados
+from apoio_testes.tokens import cabecalho, emitir_token
 
 
 def _ana(engine: Engine) -> None:

@@ -14,7 +14,9 @@ def test_periodo_de_texto() -> None:
     assert periodo.para_texto(date(2026, 10, 1)) == "2026-10"
 
 
-@pytest.mark.parametrize("texto", ["2026-13", "2026-00", "2026-1", "26-10", "2026-10-01", ""])
+@pytest.mark.parametrize(
+    "texto", ["2026-13", "2026-00", "2026-1", "26-10", "2026-10-01", "", "0000-01", "0999-12"]
+)
 def test_periodo_invalido(texto: str) -> None:
     with pytest.raises(EntradaInvalida):
         periodo.de_texto(texto)

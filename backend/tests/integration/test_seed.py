@@ -1,8 +1,8 @@
 import asyncio
 
-from apoio_testes import banco
 from sqlalchemy import Engine, text
 
+from apoio_testes import banco
 from app.seed import semear
 
 

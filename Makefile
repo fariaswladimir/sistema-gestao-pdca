@@ -19,7 +19,8 @@ api-client:
 	cd frontend && npm run gerar-cliente-api
 
 lint:
-	cd backend && $(PYTHON) -m ruff check . && $(PYTHON) -m ruff format --check .
+	$(PYTHON) -m ruff check --config backend/pyproject.toml backend tests conftest.py
+	$(PYTHON) -m ruff format --check --config backend/pyproject.toml backend tests conftest.py
 	cd frontend && npm run lint
 typecheck:
 	cd backend && $(PYTHON) -m mypy app

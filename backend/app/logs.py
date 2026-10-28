@@ -30,7 +30,9 @@ async def middleware_request_id(
 ) -> Response:
     request_id = request.headers.get("x-request-id") or uuid.uuid4().hex
     structlog.contextvars.clear_contextvars()
-    structlog.contextvars.bind_contextvars(request_id=request_id, metodo=request.method, rota=request.url.path)
+    structlog.contextvars.bind_contextvars(
+        request_id=request_id, metodo=request.method, rota=request.url.path
+    )
     resposta = await proximo(request)
     resposta.headers["x-request-id"] = request_id
     if resposta.status_code >= 500:

@@ -4,11 +4,12 @@ from decimal import Decimal
 from typing import Any
 
 import pytest
-from apoio_testes import dados
-from apoio_testes.tokens import cabecalho
 from fastapi.testclient import TestClient
 from pytest_bdd import given, parsers, scenarios, then, when
 from sqlalchemy import Engine, text
+
+from apoio_testes import dados
+from apoio_testes.tokens import cabecalho
 
 scenarios("F00-esqueleto/acceptance.feature")
 
@@ -26,7 +27,9 @@ def ctx() -> Contexto:
     return Contexto()
 
 
-def _lancar(cliente: TestClient, ctx: Contexto, codigo: str, periodo: str, valor: str, justificativa: str | None):
+def _lancar(
+    cliente: TestClient, ctx: Contexto, codigo: str, periodo: str, valor: str, justificativa: str | None
+):
     assert ctx.login, "nenhum usuário autenticado no cenário"
     corpo: dict[str, Any] = {"valor": valor}
     if justificativa is not None:

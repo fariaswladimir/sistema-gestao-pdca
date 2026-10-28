@@ -36,7 +36,9 @@ FAIXA = Polaridade.faixa
         (FAIXA, MetaValores(valor_min=D("90"), valor_max=D("110")), D("116"), D("5"), Farol.vermelho),
     ],
 )
-def test_calcular_farol(polaridade: Polaridade, meta: MetaValores, valor: D, tolerancia: D, esperado: Farol) -> None:
+def test_calcular_farol(
+    polaridade: Polaridade, meta: MetaValores, valor: D, tolerancia: D, esperado: Farol
+) -> None:
     assert calcular_farol(valor, meta, polaridade, tolerancia) == esperado
 
 

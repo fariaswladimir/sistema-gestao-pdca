@@ -1,8 +1,8 @@
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Annotated
 from uuid import UUID
 
-from pydantic import BaseModel, Field, PlainSerializer
+from pydantic import AfterValidator, BaseModel, Field, PlainSerializer, WithJsonSchema
 
 from app.dominio.tipos import Farol, Polaridade
 
@@ -37,9 +37,34 @@ class MedicaoSaida(BaseModel):
 
 class IndicadorDetalhe(IndicadorResumo):
     tolerancia_pct: Numero
-    medicoes: list[MedicaoSaida] = Field(description="Últimos 12 períodos com medição, do mais recente ao mais antigo")
+    medicoes: list[MedicaoSaida] = Field(
+        description="Últimos 12 períodos com medição, do mais recente ao mais antigo"
+    )
+
+
+# NUMERIC(18,4): até 14 dígitos inteiros; casas além da 4ª são arredondadas (meio para cima).
+LIMITE_VALOR = Decimal("99999999999999")
+
+
+def _quatro_casas(valor: Decimal) -> Decimal:
+    return valor.quantize(Decimal("0.0001"), rounding=ROUND_HALF_UP)
+
+
+ValorMedicao = Annotated[
+    Decimal,
+    Field(ge=-LIMITE_VALOR, le=LIMITE_VALOR, allow_inf_nan=False),
+    AfterValidator(_quatro_casas),
+    WithJsonSchema(
+        {
+            "type": "number",
+            "minimum": -int(LIMITE_VALOR),
+            "maximum": int(LIMITE_VALOR),
+            "description": "Valor medido; arredondado para 4 casas decimais",
+        }
+    ),
+]
 
 
 class MedicaoEntrada(BaseModel):
-    valor: Decimal = Field(max_digits=18, decimal_places=4)
+    valor: ValorMedicao
     justificativa: str | None = Field(default=None, max_length=1000)

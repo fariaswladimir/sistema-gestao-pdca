@@ -18,7 +18,9 @@ from app.seguranca.permissoes import escopo_indicadores
 
 
 class ServicoIndicadores:
-    def __init__(self, sessao: AsyncSession, usuario: Usuario, relogio: Relogio, config: Configuracao) -> None:
+    def __init__(
+        self, sessao: AsyncSession, usuario: Usuario, relogio: Relogio, config: Configuracao
+    ) -> None:
         self.sessao = sessao
         self.usuario = usuario
         self.periodo_atual = periodos.atual(relogio.agora(), config.tz_regras)
@@ -36,7 +38,10 @@ class ServicoIndicadores:
         indicador, polaridade = await self.obter_visivel(indicador_id)
         resumo = await self._resumo(indicador, polaridade)
         medicoes = await self.sessao.scalars(
-            select(Medicao).where(Medicao.indicador_id == indicador.id).order_by(Medicao.periodo.desc()).limit(12)
+            select(Medicao)
+            .where(Medicao.indicador_id == indicador.id)
+            .order_by(Medicao.periodo.desc())
+            .limit(12)
         )
         return IndicadorDetalhe(
             **resumo.model_dump(),
@@ -87,7 +92,9 @@ class ServicoIndicadores:
             unidade=indicador.unidade,
             polaridade=polaridade,
             periodo=periodos.para_texto(self.periodo_atual),
-            meta=MetaSaida(valor=meta.valor, valor_min=meta.valor_min, valor_max=meta.valor_max) if meta else None,
+            meta=MetaSaida(valor=meta.valor, valor_min=meta.valor_min, valor_max=meta.valor_max)
+            if meta
+            else None,
             valor=medicao.valor if medicao else None,
             farol=medicao.farol if medicao else Farol.sem_dado,
         )
