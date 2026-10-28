@@ -1,4 +1,6 @@
-# Ambiente local. O Keycloak atende como keycloak.localhost:8080 dentro e fora do Docker
+# Ambiente local. Por padrão sem login (AUTH_MODO=local, diretrizes de versão no AGENTS.md); o Keycloak
+# só sobe com o perfil `oidc` (COMPOSE_PROFILES=oidc e AUTH_MODO=oidc no .env).
+# Com ele, o Keycloak atende como keycloak.localhost:8080 dentro e fora do Docker
 # (navegadores resolvem *.localhost para 127.0.0.1; na rede do compose o apelido aponta para o contêiner),
 # então o emissor dos tokens é o mesmo para o navegador, a web e a API.
 services:
@@ -17,6 +19,7 @@ services:
       retries: 20
 
   keycloak:
+    profiles: [oidc]
     restart: unless-stopped
     image: quay.io/keycloak/keycloak:26.0
     command: start-dev --import-realm
@@ -43,7 +46,7 @@ services:
     env_file: .env
     depends_on:
       db: {condition: service_healthy}
-      keycloak: {condition: service_healthy}
+      keycloak: {condition: service_healthy, required: false}
     ports: ["8000:8000"]
 
   worker:

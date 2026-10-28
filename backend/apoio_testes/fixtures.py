@@ -2,6 +2,7 @@
 
 from collections.abc import Iterator
 from datetime import UTC, datetime
+from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
@@ -41,6 +42,17 @@ def _banco_limpo(request: pytest.FixtureRequest) -> Iterator[None]:
 
 @pytest.fixture
 def cliente(url_banco: str) -> Iterator[TestClient]:
+    """API no modo oidc com perfis ativos: o fluxo de login e a matriz que serão religados depois."""
+    yield from _cliente(url_banco, auth_modo="oidc", perfis_ativos=True)
+
+
+@pytest.fixture
+def cliente_local(url_banco: str) -> Iterator[TestClient]:
+    """API como roda hoje (diretrizes de versão): usuário escolhido, sem perfis."""
+    yield from _cliente(url_banco, auth_modo="local", perfis_ativos=False)
+
+
+def _cliente(url_banco: str, **ajustes: Any) -> Iterator[TestClient]:
     from app.config import Configuracao
     from app.main import criar_app
     from app.relogio import RelogioFixo, obter_relogio
@@ -51,6 +63,7 @@ def cliente(url_banco: str) -> Iterator[TestClient]:
         oidc_issuer=tokens.EMISSOR,
         oidc_audience=tokens.AUDIENCIA,
         app_version="teste",
+        **ajustes,
     )
     app = criar_app(config)
     validador = ValidadorToken(

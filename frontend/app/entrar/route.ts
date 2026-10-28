@@ -1,8 +1,11 @@
-import { signIn } from "@/auth";
+import { redirect } from "next/navigation";
 
-/** Vai direto para o login do Keycloak e volta para `?volta=` (só caminhos internos). */
+import { signIn } from "@/auth";
+import { destinoSeguro, modoLocal } from "@/lib/sessao";
+
+/** Modo local: vai para a escolha de usuário. Modo oidc: vai direto para o login do Keycloak. */
 export async function GET(request: Request) {
-  const volta = new URL(request.url).searchParams.get("volta") ?? "";
-  const destino = volta.startsWith("/") && !volta.startsWith("//") ? volta : "/meus-indicadores";
+  const destino = destinoSeguro(new URL(request.url).searchParams.get("volta"));
+  if (modoLocal()) redirect(`/escolher-usuario?volta=${encodeURIComponent(destino)}`);
   await signIn("keycloak", { redirectTo: destino });
 }

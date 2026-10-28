@@ -49,7 +49,7 @@ O arquivo é lido direto pelo pytest-bdd (`scenarios("F00-esqueleto/acceptance.f
 ### Telas (ambiente local, usuária ana)
 | | |
 | --- | --- |
-| ![Login](evidencias/1-login.png) | ![Sem dado](evidencias/2-sem-dado.png) |
+| ![Entrar escolhendo o usuário (modo local)](evidencias/1-escolher-usuario.png) | ![Sem dado](evidencias/2-sem-dado.png) |
 | ![Farol verde após lançar 85](evidencias/3-farol-verde.png) | ![Relançar sem justificativa](evidencias/4-relancar-exige-justificativa.png) |
 | ![Corrigido para 76 com justificativa: Atenção](evidencias/5-corrigido-amarelo.png) | |
 
@@ -97,3 +97,10 @@ e validou.
 2. **Merge na `main`:** confirma o job `publicar` (GHCR), pré-requisito do deploy.
 3. Achados médio e baixo da revisão de segurança, a decidir pelo humano.
 4. Depois disso, rodar /verificar-fatia de novo para a fatia passar a **Verificada**, e então /demo-fatia.
+
+## Atualização: T17 modo local (2026-10-28)
+Pelas diretrizes de versão do AGENTS.md, a F00 passou a rodar sem login e sem perfis por padrão
+(`AUTH_MODO=local`, `PERFIS_ATIVOS=false`): entra-se escolhendo o colaborador na lista (tela 1 acima) e o
+Keycloak só sobe com `COMPOSE_PROFILES=oidc`. Evidências: lint, typecheck, 77 unitários/integração,
+contrato, 11 aceitação (spec ajustada), E2E 4/4 no modo local e 4/4 no modo oidc; matriz de permissões 36/36
+rodada à parte (fora do `make check` até as versões finais).

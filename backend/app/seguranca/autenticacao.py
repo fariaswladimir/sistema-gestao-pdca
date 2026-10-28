@@ -1,5 +1,7 @@
-"""Autenticação: valida o access token OIDC (Keycloak) e resolve o colaborador.
+"""Autenticação: resolve o colaborador da requisição.
 
+Modo `oidc`: valida o access token do Keycloak. Modo `local` (primeiras versões, sem login): confia no
+colaborador escolhido na tela de entrada, enviado pela web no cabeçalho `X-Usuario-Local`.
 Perfil e setor vêm do banco, nunca de papéis do Keycloak.
 """
 
@@ -92,15 +94,23 @@ def obter_validador(request: Request) -> ValidadorToken:
 _bearer = HTTPBearer(auto_error=False)
 
 
+CABECALHO_LOCAL = "X-Usuario-Local"
+
+
 async def usuario_atual(
+    request: Request,
     credenciais: HTTPAuthorizationCredentials | None = Depends(_bearer),
     validador: ValidadorToken = Depends(obter_validador),
     sessao: AsyncSession = Depends(sessao_db),
 ) -> Usuario:
-    if credenciais is None:
-        raise NaoAutenticado("Autenticação necessária.")
-    claims = await validador.validar(credenciais.credentials)
-    colaborador = await _vincular(sessao, claims)
+    colaborador: Colaborador | None
+    if request.app.state.config.auth_modo == "local":
+        colaborador = await _escolhido_localmente(sessao, request.headers.get(CABECALHO_LOCAL))
+    else:
+        if credenciais is None:
+            raise NaoAutenticado("Autenticação necessária.")
+        claims = await validador.validar(credenciais.credentials)
+        colaborador = await _vincular(sessao, claims)
     if colaborador is None or colaborador.status != StatusColaborador.ativo:
         raise SemPermissao("Usuário sem cadastro ativo no sistema.")
     return Usuario(
@@ -123,4 +133,15 @@ async def _vincular(sessao: AsyncSession, claims: dict[str, Any]) -> Colaborador
         return None
     colaborador.sub_oidc = sub
     await sessao.commit()
+    return colaborador
+
+
+async def _escolhido_localmente(sessao: AsyncSession, valor: str | None) -> Colaborador:
+    try:
+        colaborador_id = UUID(valor or "")
+    except ValueError:
+        raise NaoAutenticado("Escolha um usuário para entrar.") from None
+    colaborador = await sessao.get(Colaborador, colaborador_id)
+    if colaborador is None:
+        raise NaoAutenticado("Escolha um usuário para entrar.")
     return colaborador

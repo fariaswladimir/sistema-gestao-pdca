@@ -4,7 +4,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import Connection, text
+from sqlalchemy import Connection, Engine, text
 from uuid6 import uuid7
 
 
@@ -93,3 +93,12 @@ def configurar_indicador(
         {"t": tipo_indicador(con, polaridade), "tol": tolerancia_pct, "i": ind},
     )
     con.execute(text("update meta set valor = :v where indicador_id = :i"), {"v": meta, "i": ind})
+
+
+def cabecalho_local(engine: Engine, login: str) -> dict[str, str]:
+    """Modo local: a web envia o id do colaborador escolhido na tela de entrada."""
+    with engine.connect() as con:
+        colaborador_id = con.execute(
+            text("select id from colaborador where email = :e"), {"e": f"{login}@exemplo.org"}
+        ).scalar_one()
+    return {"X-Usuario-Local": str(colaborador_id)}

@@ -5,7 +5,7 @@ Funcionalidade: Esqueleto andante
     Dado o setor "Piloto" com o colaborador "ana" responsável pelo indicador "IND-01"
     E o indicador "IND-01" é "maior_melhor" com meta 80 e tolerância 5%
 
-  Cenário: acesso sem login é negado
+  Cenário: acesso sem usuário na sessão é negado
     Quando um visitante sem sessão acessa a lista de indicadores
     Então recebe resposta 401
 
@@ -39,8 +39,12 @@ Funcionalidade: Esqueleto andante
     Então o farol passa a "verde"
     E existe evento de auditoria da medição com valor anterior 70 e novo 82
 
-  Cenário: colaborador não vê indicador de outro responsável
+  Cenário: a lista mostra só os indicadores de que a colaboradora é responsável
     Dado o indicador "IND-02" sob responsabilidade de "bruno"
     E "ana" está autenticada
-    Quando ela consulta "IND-02"
-    Então recebe resposta 404
+    Quando ela consulta seus indicadores
+    Então vê "IND-01" e não vê "IND-02"
+
+  Cenário: no modo local, a entrada lista os colaboradores ativos para escolha
+    Quando um visitante abre a escolha de usuário
+    Então vê "Ana" na lista, sem e-mail

@@ -7,8 +7,8 @@ P permitido · N negado · R só rascunho · O só os próprios itens.
 from collections.abc import Awaitable, Callable
 from enum import StrEnum
 
-from fastapi import Depends
-from sqlalchemy import ColumnElement
+from fastapi import Depends, Request
+from sqlalchemy import ColumnElement, true
 
 from app.dominio.erros import SemPermissao
 from app.dominio.tipos import Perfil
@@ -74,12 +74,13 @@ def exigir_permissao(acao: str) -> Callable[..., Awaitable[Usuario]]:
     """Dependência FastAPI: autentica e barra o perfil sem a ação (403).
 
     `rascunho` e `proprias` passam aqui; o serviço aplica a restrição fina.
+    Com `perfis_ativos` desligado (até as versões finais), só autentica.
     """
     if acao not in PERMISSOES:
         raise ValueError(f"Ação desconhecida: {acao}")
 
-    async def _verificar(usuario: Usuario = Depends(usuario_atual)) -> Usuario:
-        if acesso(usuario.perfil, acao) == Acesso.negado:
+    async def _verificar(request: Request, usuario: Usuario = Depends(usuario_atual)) -> Usuario:
+        if request.app.state.config.perfis_ativos and acesso(usuario.perfil, acao) == Acesso.negado:
             raise SemPermissao("Seu perfil não permite esta ação.")
         return usuario
 
@@ -87,7 +88,9 @@ def exigir_permissao(acao: str) -> Callable[..., Awaitable[Usuario]]:
     return _verificar
 
 
-def escopo_indicadores(usuario: Usuario) -> ColumnElement[bool]:
-    """Indicadores visíveis ao usuário. F00 (RN2): só aqueles de que é responsável."""
-    # TODO(F01): setor próprio e descendentes + estratégicos publicados; diretoria/escritório/admin veem tudo.
+def escopo_indicadores(usuario: Usuario, perfis_ativos: bool) -> ColumnElement[bool]:
+    """Indicadores visíveis ao usuário. Sem perfis ativos (até as versões finais), todos."""
+    if not perfis_ativos:
+        return true()
+    # TODO(F09): setor próprio e descendentes + estratégicos publicados; diretoria/escritório/admin veem tudo.
     return Indicador.responsavel_id == usuario.id

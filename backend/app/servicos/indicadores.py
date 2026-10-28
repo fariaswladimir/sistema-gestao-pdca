@@ -23,13 +23,14 @@ class ServicoIndicadores:
     ) -> None:
         self.sessao = sessao
         self.usuario = usuario
+        self.perfis_ativos = config.perfis_ativos
         self.periodo_atual = periodos.atual(relogio.agora(), config.tz_regras)
 
     async def listar_meus(self) -> list[IndicadorResumo]:
         linhas = await self.sessao.execute(
             select(Indicador, TipoIndicador.polaridade)
             .join(TipoIndicador)
-            .where(escopo_indicadores(self.usuario), Indicador.ativo)
+            .where(Indicador.responsavel_id == self.usuario.id, Indicador.ativo)
             .order_by(Indicador.codigo)
         )
         return [await self._resumo(ind, pol) for ind, pol in linhas.all()]
@@ -63,7 +64,11 @@ class ServicoIndicadores:
             await self.sessao.execute(
                 select(Indicador, TipoIndicador.polaridade)
                 .join(TipoIndicador)
-                .where(Indicador.id == indicador_id, escopo_indicadores(self.usuario), Indicador.ativo)
+                .where(
+                    Indicador.id == indicador_id,
+                    escopo_indicadores(self.usuario, self.perfis_ativos),
+                    Indicador.ativo,
+                )
             )
         ).first()
         if linha is None:

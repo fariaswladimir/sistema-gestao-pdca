@@ -1,4 +1,6 @@
 from pathlib import Path
+from types import SimpleNamespace
+from typing import Any
 from uuid import uuid4
 
 import pytest
@@ -33,16 +35,27 @@ def _usuario(perfil: Perfil) -> Usuario:
     return Usuario(id=uuid4(), nome="x", perfil=perfil, setor_id=uuid4())
 
 
+def _requisicao(perfis_ativos: bool) -> Any:
+    return SimpleNamespace(
+        app=SimpleNamespace(state=SimpleNamespace(config=SimpleNamespace(perfis_ativos=perfis_ativos)))
+    )
+
+
 async def test_exigir_permissao_barra_perfil_negado() -> None:
     verificar = exigir_permissao("medicao:registrar")
     with pytest.raises(SemPermissao):
-        await verificar(_usuario(Perfil.leitor))
+        await verificar(_requisicao(True), _usuario(Perfil.leitor))
 
 
 @pytest.mark.parametrize("perfil", [Perfil.colaborador, Perfil.gestor, Perfil.escritorio, Perfil.servico])
 async def test_exigir_permissao_deixa_passar_perfil_permitido(perfil: Perfil) -> None:
     usuario = _usuario(perfil)
-    assert await exigir_permissao("medicao:registrar")(usuario) is usuario
+    assert await exigir_permissao("medicao:registrar")(_requisicao(True), usuario) is usuario
+
+
+async def test_sem_perfis_ativos_qualquer_perfil_passa() -> None:
+    usuario = _usuario(Perfil.leitor)
+    assert await exigir_permissao("medicao:registrar")(_requisicao(False), usuario) is usuario
 
 
 def test_acao_desconhecida_falha_cedo() -> None:

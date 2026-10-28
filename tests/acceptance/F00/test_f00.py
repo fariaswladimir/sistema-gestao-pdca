@@ -1,4 +1,7 @@
-"""Passos da F00 – Esqueleto andante. Lê a spec aprovada direto de specs/F00-esqueleto/acceptance.feature."""
+"""Passos da F00 – Esqueleto andante. Lê a spec aprovada direto de specs/F00-esqueleto/acceptance.feature.
+
+Roda no modo como o produto está hoje (diretrizes de versão): usuário escolhido, sem perfis.
+"""
 
 from decimal import Decimal
 from typing import Any
@@ -9,22 +12,31 @@ from pytest_bdd import given, parsers, scenarios, then, when
 from sqlalchemy import Engine, text
 
 from apoio_testes import dados
-from apoio_testes.tokens import cabecalho
 
 scenarios("F00-esqueleto/acceptance.feature")
 
 
 class Contexto:
-    def __init__(self) -> None:
+    def __init__(self, engine: Engine) -> None:
+        self.engine = engine
         self.indicadores: dict[str, Any] = {}
         self.login: str | None = None
         self.resposta: Any = None
         self.ultimo_lancamento: tuple[str, str] | None = None
 
+    def cabecalho(self) -> dict[str, str]:
+        assert self.login, "nenhum usuário autenticado no cenário"
+        return dados.cabecalho_local(self.engine, self.login)
+
 
 @pytest.fixture
-def ctx() -> Contexto:
-    return Contexto()
+def cliente(cliente_local: TestClient) -> TestClient:
+    return cliente_local
+
+
+@pytest.fixture
+def ctx(engine: Engine) -> Contexto:
+    return Contexto(engine)
 
 
 def _lancar(
@@ -36,7 +48,7 @@ def _lancar(
         corpo["justificativa"] = justificativa
     ctx.ultimo_lancamento = (codigo, periodo)
     ctx.resposta = cliente.put(
-        f"/indicadores/{ctx.indicadores[codigo]}/medicoes/{periodo}", json=corpo, headers=cabecalho(ctx.login)
+        f"/indicadores/{ctx.indicadores[codigo]}/medicoes/{periodo}", json=corpo, headers=ctx.cabecalho()
     )
     return ctx.resposta
 
@@ -85,6 +97,11 @@ def visitante_lista(cliente: TestClient, ctx: Contexto) -> None:
     ctx.resposta = cliente.get("/indicadores/meus")
 
 
+@when("um visitante abre a escolha de usuário")
+def visitante_escolha(cliente: TestClient, ctx: Contexto) -> None:
+    ctx.resposta = cliente.get("/sessao-local/usuarios")
+
+
 @when("um visitante consulta a saúde do sistema")
 def visitante_saude(cliente: TestClient, ctx: Contexto) -> None:
     ctx.resposta = cliente.get("/saude")
@@ -93,13 +110,7 @@ def visitante_saude(cliente: TestClient, ctx: Contexto) -> None:
 @when("ela consulta seus indicadores")
 def consulta_meus(cliente: TestClient, ctx: Contexto) -> None:
     assert ctx.login
-    ctx.resposta = cliente.get("/indicadores/meus", headers=cabecalho(ctx.login))
-
-
-@when(parsers.parse('ela consulta "{codigo}"'))
-def consulta_indicador(cliente: TestClient, ctx: Contexto, codigo: str) -> None:
-    assert ctx.login
-    ctx.resposta = cliente.get(f"/indicadores/{ctx.indicadores[codigo]}", headers=cabecalho(ctx.login))
+    ctx.resposta = cliente.get("/indicadores/meus", headers=ctx.cabecalho())
 
 
 @when(parsers.parse('ela lança o valor {valor} em "{codigo}" no período "{periodo}"'))
@@ -149,10 +160,26 @@ def ve_farol_atual(ctx: Contexto, codigo: str, farol: str) -> None:
     assert itens[codigo]["farol"] == farol
 
 
+@then(parsers.parse('vê "{visivel}" e não vê "{oculto}"'))
+def ve_so_os_seus(ctx: Contexto, visivel: str, oculto: str) -> None:
+    assert ctx.resposta.status_code == 200, ctx.resposta.text
+    codigos = {i["codigo"] for i in ctx.resposta.json()}
+    assert visivel in codigos
+    assert oculto not in codigos
+
+
+@then(parsers.parse('vê "{nome}" na lista, sem e-mail'))
+def ve_na_escolha(ctx: Contexto, nome: str) -> None:
+    assert ctx.resposta.status_code == 200, ctx.resposta.text
+    usuarios = ctx.resposta.json()
+    assert nome in {u["nome"] for u in usuarios}
+    assert all("email" not in u for u in usuarios)
+
+
 @then(parsers.parse('o farol de "{codigo}" em "{periodo}" é "{farol}"'))
 def farol_no_periodo(cliente: TestClient, ctx: Contexto, codigo: str, periodo: str, farol: str) -> None:
     assert ctx.login
-    resposta = cliente.get(f"/indicadores/{ctx.indicadores[codigo]}", headers=cabecalho(ctx.login))
+    resposta = cliente.get(f"/indicadores/{ctx.indicadores[codigo]}", headers=ctx.cabecalho())
     assert resposta.status_code == 200, resposta.text
     medicoes = {m["periodo"]: m for m in resposta.json()["medicoes"]}
     assert medicoes[periodo]["farol"] == farol

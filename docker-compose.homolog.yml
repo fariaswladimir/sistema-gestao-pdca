@@ -15,6 +15,7 @@ x-backend: &backend
   image: ${IMAGEM_PREFIXO:-ghcr.io/fariaswladimir/sistema-gestao-pdca}-api:${VERSAO:-main}
   restart: unless-stopped
   environment:
+    AUTH_MODO: oidc
     DATABASE_URL: postgresql+asyncpg://gestao:${DB_PASSWORD}@db:5432/gestao
     LOG_JSON: "true"
     TZ_REGRAS: ${TZ_REGRAS:-America/Recife}
@@ -93,6 +94,7 @@ services:
     image: ${IMAGEM_PREFIXO:-ghcr.io/fariaswladimir/sistema-gestao-pdca}-web:${VERSAO:-main}
     restart: unless-stopped
     environment:
+      AUTH_MODO: oidc
       AUTH_SECRET: ${AUTH_SECRET:?defina AUTH_SECRET}
       AUTH_URL: https://${HOMOLOG_HOST}
       AUTH_TRUST_HOST: "true"

@@ -42,8 +42,9 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
       confere a versão, login com troca obrigatória de senha, lançamento com farol e logout pelo HTTPS.
       Falta, no servidor: preparar a VM e o runner, ligar `HOMOLOG_ATIVA` e configurar os monitores do Kuma
       (passos em `infra/homolog/README.md`).
-- [ ] T17 Modo local sem login (diretrizes 3 e 4 do AGENTS.md). `AUTH_MODO=local` (padrão no `.env.example`):
+- [x] T17 Modo local sem login (diretrizes 3 e 4 do AGENTS.md). `AUTH_MODO=local` (padrão no `.env.example`):
       a web oferece a escolha do usuário numa lista (sem senha, sem Keycloak no compose) e a API aceita o usuário
       escolhido; perfis e escopo liberados. `AUTH_MODO=oidc` religa o fluxo atual sem mudar código.
       Pronto quando: `make up` sem Keycloak abre a tela, a auditoria registra o usuário escolhido, os testes de aceitação
       seguem verdes e o modo `oidc` continua passando nos testes atuais. Exige ajuste da spec F00 aprovado pelo humano.
+      Feito: spec ajustada (aprovada em 2026-10-28); E2E 4/4 no modo local e 4/4 no modo oidc.

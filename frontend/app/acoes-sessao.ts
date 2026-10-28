@@ -1,13 +1,18 @@
 "use server";
 
 import { getToken } from "next-auth/jwt";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { signOut } from "@/auth";
+import { COOKIE_USUARIO_LOCAL, modoLocal } from "@/lib/sessao";
 
 /** Encerra a sessão da web e a do Keycloak (senão o próximo login entraria sem pedir senha). */
 export async function sair() {
+  if (modoLocal()) {
+    (await cookies()).delete(COOKIE_USUARIO_LOCAL);
+    redirect("/escolher-usuario");
+  }
   const token = await getToken({
     req: { headers: await headers() },
     secret: process.env.AUTH_SECRET,
