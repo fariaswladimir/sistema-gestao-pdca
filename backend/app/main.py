@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.api import eu, saude
+from app.api import eu, indicadores, saude
 from app.api.erros import registrar_tratamento_de_erros
 from app.banco import criar_engine, criar_fabrica
 from app.config import Configuracao, obter_configuracao
@@ -31,6 +31,7 @@ def criar_app(config: Configuracao | None = None) -> FastAPI:
     app.middleware("http")(middleware_request_id)
     app.include_router(saude.router)
     app.include_router(eu.router)
+    app.include_router(indicadores.router)
     return app
 
 

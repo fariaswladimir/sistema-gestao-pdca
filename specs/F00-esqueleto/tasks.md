@@ -18,7 +18,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
       Pronto quando: unitários de token verdes; cenário "acesso sem login" verde.
 - [x] T7 Permissões. `permissoes.py` espelhando a matriz, `exigir_permissao`, `escopo_indicadores`, teste de paridade com `matriz.yaml`.
       Pronto quando: teste de paridade verde e `exigir_permissao` coberta por unitários.
-- [ ] T8 Leitura de indicadores. `GET /indicadores/meus` e `GET /indicadores/{id}` com relógio injetável.
+- [x] T8 Leitura de indicadores. `GET /indicadores/meus` e `GET /indicadores/{id}` com relógio injetável.
       Pronto quando: cenários "vê seu indicador sem dado" e "não vê indicador de outro responsável" verdes.
 - [ ] T9 Lançamento de medição. `PUT /indicadores/{id}/medicoes/{periodo}`, farol gravado, regra de justificativa,
       auditoria na mesma transação e `MedicaoRegistrada` no outbox.
