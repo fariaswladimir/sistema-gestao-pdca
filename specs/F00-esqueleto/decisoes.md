@@ -13,3 +13,5 @@
 | 2026-10-28 | Keycloak atende como `keycloak.localhost:8080` (apelido de rede no compose). | Navegadores resolvem `*.localhost` para 127.0.0.1 e o DNS do Docker resolve o apelido: emissor único para navegador, web e API, sem editar o arquivo hosts. |
 | 2026-10-28 | T2 validada com db, keycloak e api; `worker` e `web` sobem a partir da T10 e da T13. | O código desses serviços é dessas tarefas; o compose já os declara. |
 | 2026-10-28 | Makefile chama ferramentas via `$(PYTHON) -m` e roda o pytest a partir da raiz. | Funciona com venv ativo, com `PYTHON=` explícito no Windows e no CI. |
+| 2026-10-28 | `menor_melhor` e `faixa` no motor seguem a RN3 da spec F01 (ainda em rascunho); só `maior_melhor` é aceita pelo serviço na F00. | Plano aprovado pede as três polaridades testadas no motor. Se a F01 mudar a regra na aprovação, ajustar `motor/farol.py` e a tabela de casos. |
+| 2026-10-28 | Indicador sem meta vigente fica `sem_dado`. | A spec não trata o caso; o seed sempre tem meta. Reavaliar na F01 (cadastro de metas). |
