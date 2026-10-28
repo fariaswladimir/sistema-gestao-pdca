@@ -15,3 +15,5 @@
 | 2026-10-28 | Makefile chama ferramentas via `$(PYTHON) -m` e roda o pytest a partir da raiz. | Funciona com venv ativo, com `PYTHON=` explícito no Windows e no CI. |
 | 2026-10-28 | `menor_melhor` e `faixa` no motor seguem a RN3 da spec F01 (ainda em rascunho); só `maior_melhor` é aceita pelo serviço na F00. | Plano aprovado pede as três polaridades testadas no motor. Se a F01 mudar a regra na aprovação, ajustar `motor/farol.py` e a tabela de casos. |
 | 2026-10-28 | Indicador sem meta vigente fica `sem_dado`. | A spec não trata o caso; o seed sempre tem meta. Reavaliar na F01 (cadastro de metas). |
+| 2026-10-28 | E-mail já vinculado a outro `sub` não é revinculado (403). | Evita sequestro de conta se alguém criar no Keycloak outro usuário com o mesmo e-mail. |
+| 2026-10-28 | O cenário "acesso sem login" fecha na T8, junto com a rota `/indicadores/meus`; na T6 o 401 é provado em `/eu`. | A rota do cenário pertence à T8. |

@@ -13,6 +13,11 @@ AGORA = datetime(2026, 10, 15, 12, 0, tzinfo=UTC)
 
 
 @pytest.fixture(scope="session")
+def anyio_backend() -> str:
+    return "asyncio"
+
+
+@pytest.fixture(scope="session")
 def url_banco() -> Iterator[str]:
     with banco.banco_de_testes() as url:
         banco.aplicar_migracoes(url)
@@ -47,7 +52,7 @@ def cliente(url_banco: str) -> Iterator[TestClient]:
         app_version="teste",
     )
     app = criar_app(config)
-    validador = ValidadorToken(emissor=tokens.EMISSOR, audiencia=tokens.AUDIENCIA, obter_jwks=tokens.jwks)
+    validador = ValidadorToken(emissor=tokens.EMISSOR, audiencia=tokens.AUDIENCIA, obter_jwks=lambda forcar=False: tokens.jwks())
     app.dependency_overrides[obter_validador] = lambda: validador
     app.dependency_overrides[obter_relogio] = lambda: RelogioFixo(AGORA)
     with TestClient(app) as c:

@@ -14,7 +14,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
       Pronto quando: `make seed` duas vezes seguidas não duplica nada; ana e bruno entram no Keycloak local.
 - [x] T5 Motor do farol. `calcular_farol` com as 3 polaridades e `Decimal`; meta vigente do período.
       Pronto quando: unitários verdes, incluindo os limites 80/76/75,9 e `sem_dado`.
-- [ ] T6 Autenticação na API. Validação do JWT via JWKS, `usuario_atual`, vínculo `sub_oidc`/e-mail, `GET /eu`, handler de erros.
+- [x] T6 Autenticação na API. Validação do JWT via JWKS, `usuario_atual`, vínculo `sub_oidc`/e-mail, `GET /eu`, handler de erros.
       Pronto quando: unitários de token verdes; cenário "acesso sem login" verde.
 - [ ] T7 Permissões. `permissoes.py` espelhando a matriz, `exigir_permissao`, `escopo_indicadores`, teste de paridade com `matriz.yaml`.
       Pronto quando: teste de paridade verde e `exigir_permissao` coberta por unitários.
