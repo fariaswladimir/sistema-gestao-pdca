@@ -5,6 +5,10 @@ description: Aplicar ao criar ou alterar endpoints, ferramentas MCP, consultas, 
 
 # Segurança, perfis e auditoria
 
+> **Vigência (2026-10-28):** autenticação real só a partir da fatia [DECIDIR: F02 ou F03], com modo local
+> (`AUTH_MODO=local`) até lá; perfis, escopo e testes de permissão só nas versões finais (F09/F10).
+> Auditoria das escritas, segredos fora do código e LGPD nos logs valem desde já. Ver "Diretrizes de versão" no AGENTS.md.
+
 - Perfis: admin, escritorio, diretoria, gestor, colaborador, leitor, servico. Matriz em @specs/_perfis-permissoes.md.
 - Autenticação: OIDC via Keycloak em todos os ambientes; na v1, usuários com login e senha próprios no Keycloak (sem SSO corporativo; federação com Entra ID fica para depois). API externa: OAuth 2.0 client credentials
   com escopos. MCP: OAuth com o token do usuário conectado; a IA herda exatamente as permissões dele.

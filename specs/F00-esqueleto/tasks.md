@@ -35,10 +35,15 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
       Pronto quando: `make e2e` verde (login → lançar → ver farol; relançar sem justificativa → erro; sem login → login).
 - [x] T15 CI. Jobs `check`, `e2e` (com compose) e `publicar` (imagens no GHCR).
       Pronto quando: um PR mostra `check` e `e2e` verdes; um push na `main` publica as imagens com o SHA como tag.
-- [ ] T16 Homologação. `docker-compose.homolog.yml` (Keycloak em modo produção, Caddy HTTPS, Uptime Kuma),
+- [ ] T16 (ADIADA, diretriz 1 do AGENTS.md) Homologação. `docker-compose.homolog.yml` (Keycloak em modo produção, Caddy HTTPS, Uptime Kuma),
       runner self-hosted e job `deploy-homologacao` com migração e checagem de `/saude`.
       Pronto quando: um merge na `main` aparece em homologação com a nova versão em `/saude` e o Uptime Kuma alerta quando a API para.
       Andamento: código pronto e ensaiado localmente (`homolog.localhost`, CA interna): sobe saudável, migra, semeia,
       confere a versão, login com troca obrigatória de senha, lançamento com farol e logout pelo HTTPS.
       Falta, no servidor: preparar a VM e o runner, ligar `HOMOLOG_ATIVA` e configurar os monitores do Kuma
       (passos em `infra/homolog/README.md`).
+- [ ] T17 Modo local sem login (diretrizes 3 e 4 do AGENTS.md). `AUTH_MODO=local` (padrão no `.env.example`):
+      a web oferece a escolha do usuário numa lista (sem senha, sem Keycloak no compose) e a API aceita o usuário
+      escolhido; perfis e escopo liberados. `AUTH_MODO=oidc` religa o fluxo atual sem mudar código.
+      Pronto quando: `make up` sem Keycloak abre a tela, a auditoria registra o usuário escolhido, os testes de aceitação
+      seguem verdes e o modo `oidc` continua passando nos testes atuais. Exige ajuste da spec F00 aprovado pelo humano.

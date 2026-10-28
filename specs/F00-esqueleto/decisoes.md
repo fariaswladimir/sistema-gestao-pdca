@@ -43,3 +43,6 @@
 | 2026-10-28 | `deploy-homologacao` só roda com a variável `HOMOLOG_ATIVA=true` e runner com rótulo `homologacao`; o mesmo `infra/homolog/implantar.sh` serve ao job e à operação manual. | Sem a variável o job ficaria na fila esperando um runner inexistente. |
 | 2026-10-28 | Monitores do Uptime Kuma configurados à mão (roteiro no README). | A versão 1.x não tem configuração declarativa nem API REST. |
 | 2026-10-28 | Realm de dev com ids fixos de usuário. | Recriar o contêiner do Keycloak (H2 do modo dev) gerava outro `sub`; a API, corretamente, recusava revincular o e-mail e o ambiente local quebrava. |
+| 2026-10-28 | Diretrizes de versão do dono do produto: primeiras versões locais e sem infra complexa; autenticação real só a partir da fatia F02 ou F03 (a decidir); perfis e escopo só nas versões finais (F09/F10). Registradas no AGENTS.md e na constituição. | Prioriza funcionalidade usável cedo. O código de Keycloak, matriz e homologação já pronto fica e é desligado por configuração (T17), não removido. |
+| 2026-10-28 | T16 adiada: o código de homologação fica pronto e ensaiado, e a subida no servidor espera a fase com servidor. | Diretriz 1 (primeiras versões locais). |
+| 2026-10-28 | A `main` recebeu a F00; `publicar` enviou as imagens api e web ao GHCR (run 40679644081). | Fecha o "Pronto quando" da T15. |

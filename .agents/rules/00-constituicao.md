@@ -10,8 +10,10 @@ trigger: always_on
    Mudar `spec.md` ou `acceptance.feature` exige aprovação explícita do humano.
 3. **Fatia vertical e pequena.** Cada tarefa de `tasks.md` deixa o sistema funcionando e testado.
    Não antecipe funcionalidade de fatias futuras; deixe um TODO com o código da fatia (ex.: `# TODO(F09)`).
-4. **Toda leitura filtra por perfil e setor.** Nenhuma consulta retorna dados fora do escopo do usuário
-   (ver @specs/_perfis-permissoes.md). Teste de permissão é obrigatório para todo endpoint e ferramenta MCP novos.
+4. **Perfis e escopo só nas versões finais (F09/F10).** Até lá, todo usuário vê e altera tudo e não se criam
+   regras de perfil ou escopo novas (ver "Diretrizes de versão" no AGENTS.md). A partir delas: toda leitura filtra
+   por perfil e setor (ver @specs/_perfis-permissoes.md) e teste de permissão é obrigatório para todo endpoint
+   e ferramenta MCP.
 5. **Toda escrita é auditada.** Mudanças em meta, aceite, medição, anomalia, plano, padrão e nota de diagnóstico
    geram `evento_auditoria` com ator, tipo de ator (humano, servico, ia) e antes/depois.
 6. **IA nunca decide sozinha.** Tudo o que um modelo de IA cria entra como rascunho ou sugestão pendente,
