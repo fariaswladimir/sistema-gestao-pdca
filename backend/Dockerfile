@@ -8,9 +8,9 @@ ENV APP_VERSION=${APP_VERSION} \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /srv
-COPY pyproject.toml ./
+COPY pyproject.toml restricoes.txt ./
 COPY app ./app
-RUN pip install . && useradd --system --uid 10001 gestao
+RUN pip install -c restricoes.txt . && useradd --system --uid 10001 gestao
 COPY alembic.ini ./
 COPY migrations ./migrations
 
