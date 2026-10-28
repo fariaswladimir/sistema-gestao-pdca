@@ -17,3 +17,5 @@
 | 2026-10-28 | Indicador sem meta vigente fica `sem_dado`. | A spec não trata o caso; o seed sempre tem meta. Reavaliar na F01 (cadastro de metas). |
 | 2026-10-28 | E-mail já vinculado a outro `sub` não é revinculado (403). | Evita sequestro de conta se alguém criar no Keycloak outro usuário com o mesmo e-mail. |
 | 2026-10-28 | O cenário "acesso sem login" fecha na T8, junto com a rota `/indicadores/meus`; na T6 o 401 é provado em `/eu`. | A rota do cenário pertence à T8. |
+| 2026-10-28 | Auditoria grava valores como texto decimal (`"70.0000"`); a API devolve número. | Trilha exata, sem erro de ponto flutuante; cliente recebe JSON numérico. |
+| 2026-10-28 | Lançamento simultâneo no mesmo período responde 409. | A unicidade (indicador, período) no banco é a última barreira; o cliente recarrega e relança com justificativa. |

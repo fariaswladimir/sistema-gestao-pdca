@@ -20,7 +20,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
       Pronto quando: teste de paridade verde e `exigir_permissao` coberta por unitários.
 - [x] T8 Leitura de indicadores. `GET /indicadores/meus` e `GET /indicadores/{id}` com relógio injetável.
       Pronto quando: cenários "vê seu indicador sem dado" e "não vê indicador de outro responsável" verdes.
-- [ ] T9 Lançamento de medição. `PUT /indicadores/{id}/medicoes/{periodo}`, farol gravado, regra de justificativa,
+- [x] T9 Lançamento de medição. `PUT /indicadores/{id}/medicoes/{periodo}`, farol gravado, regra de justificativa,
       auditoria na mesma transação e `MedicaoRegistrada` no outbox.
       Pronto quando: os 5 exemplos de farol e o cenário de relançamento (422 + auditoria 70 → 82) verdes; `make test-slice F=F00` todo verde.
 - [ ] T10 Worker da fila. Laço com `SKIP LOCKED` e registro de handlers.

@@ -23,6 +23,10 @@ class NaoEncontrado(ErroDominio):
     status_http = 404
 
 
+class Conflito(ErroDominio):
+    status_http = 409
+
+
 class EntradaInvalida(ErroDominio):
     status_http = 422
 
