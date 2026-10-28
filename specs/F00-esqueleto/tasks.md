@@ -10,7 +10,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
       Pronto quando: `make up` sobe db, keycloak, api, worker e web; `curl localhost:8000/saude` dá 200; cenário "saúde" verde.
 - [x] T3 Modelos e migração inicial. Tabelas e extensões do plano, UUID v7, `NUMERIC`.
       Pronto quando: `make migrate` cria tudo; teste de integração sobe e desce a migração (`downgrade base`) sem erro.
-- [ ] T4 Seed idempotente e usuários do realm de dev.
+- [x] T4 Seed idempotente e usuários do realm de dev.
       Pronto quando: `make seed` duas vezes seguidas não duplica nada; ana e bruno entram no Keycloak local.
 - [ ] T5 Motor do farol. `calcular_farol` com as 3 polaridades e `Decimal`; meta vigente do período.
       Pronto quando: unitários verdes, incluindo os limites 80/76/75,9 e `sem_dado`.
