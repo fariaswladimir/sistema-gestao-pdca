@@ -56,7 +56,8 @@ A página não é versionada (é derivada); quem quiser vê-la roda `make eap` e
 - Banco: PostgreSQL 16 com extensões `ltree` e `pgvector`
 - Frontend: Next.js (React, TypeScript, App Router), Tailwind
 - Interface: [Atlassian Design System](https://atlassian.design/design-system) como referência de método
-  (tokens semânticos, grade de 8 px, componentes), sem pacotes `@atlaskit`; regras em `.agents/rules/25-interface.md`
+  (tokens semânticos, grade de 8 px, componentes), sem pacotes `@atlaskit`; regras em `.agents/rules/25-interface.md`.
+  Todas as telas previstas (F00 a F10) estão no protótipo navegável `docs/prototipo/index.html` (abre sem servidor).
 - Servidor MCP: SDK oficial `mcp` para Python (transporte Streamable HTTP), montado no mesmo serviço
 - Testes: pytest, pytest-bdd (aceitação), Schemathesis (contrato), Playwright (ponta a ponta)
 - Infra local: Docker Compose (postgres, keycloak, api, web)

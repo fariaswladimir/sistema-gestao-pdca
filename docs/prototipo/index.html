@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protótipo das telas · Gestão PDCA</title>
+<style>
+/* Mesmos tokens de frontend/app/globals.css (referência: método do Atlassian Design System). */
+:root {
+  --ds-texto:#1f2733; --ds-texto-sutil:#4a5565; --ds-texto-mais-sutil:#6b7585; --ds-texto-inverso:#fff; --ds-link:#1d5fd6;
+  --ds-fundo-pagina:#f7f8f9; --ds-superficie:#fff; --ds-superficie-elevada:#fff; --ds-fundo-neutro:#eef0f3;
+  --ds-fundo-neutro-hover:#e2e5ea; --ds-fundo-marca:#1d5fd6; --ds-fundo-marca-hover:#174eb3; --ds-fundo-selecionado:#e8f0fd;
+  --ds-borda:#d5d9e0; --ds-borda-forte:#8a93a3; --ds-borda-foco:#3b7cf0;
+  --ds-sucesso-fundo:#ddf4e6; --ds-sucesso-texto:#1b6b3c; --ds-sucesso-borda:#2f9a5a;
+  --ds-alerta-fundo:#fff1cc; --ds-alerta-texto:#7a4e00; --ds-alerta-borda:#d69a00;
+  --ds-perigo-fundo:#fde3e1; --ds-perigo-texto:#a12a1f; --ds-perigo-borda:#d9473a;
+  --ds-info-fundo:#e3edfd; --ds-info-texto:#1a4fa8; --ds-info-borda:#3b7cf0;
+  --ds-neutro-fundo:#eef0f3; --ds-neutro-texto:#3e4757; --ds-neutro-borda:#8a93a3;
+  --ds-descoberta-fundo:#efe6fc; --ds-descoberta-texto:#5b2fa3;
+  --ds-sombra-elevada:0 1px 1px rgb(23 30 41/.12),0 0 1px rgb(23 30 41/.24);
+  --ds-sombra-sobreposta:0 8px 12px rgb(23 30 41/.15),0 0 1px rgb(23 30 41/.3);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ds-texto:#dfe3ea; --ds-texto-sutil:#aeb6c3; --ds-texto-mais-sutil:#8a93a3; --ds-texto-inverso:#10141a; --ds-link:#7aa7f5;
+    --ds-fundo-pagina:#15191f; --ds-superficie:#1d222a; --ds-superficie-elevada:#232933; --ds-fundo-neutro:#2b313b;
+    --ds-fundo-neutro-hover:#353c48; --ds-fundo-marca:#6e9ff2; --ds-fundo-marca-hover:#8db3f5; --ds-fundo-selecionado:#1c2b45;
+    --ds-borda:#39414d; --ds-borda-forte:#6b7585; --ds-borda-foco:#7aa7f5;
+    --ds-sucesso-fundo:#163323; --ds-sucesso-texto:#8fdcab; --ds-sucesso-borda:#4cb377;
+    --ds-alerta-fundo:#3a2c0b; --ds-alerta-texto:#f5cd6a; --ds-alerta-borda:#c99a20;
+    --ds-perigo-fundo:#3f1c19; --ds-perigo-texto:#f7a89f; --ds-perigo-borda:#e0675b;
+    --ds-info-fundo:#1c2b45; --ds-info-texto:#a9c6f8; --ds-info-borda:#6e9ff2;
+    --ds-neutro-fundo:#2b313b; --ds-neutro-texto:#c3cad5; --ds-neutro-borda:#6b7585;
+    --ds-descoberta-fundo:#2c2145; --ds-descoberta-texto:#cdb5f7;
+    --ds-sombra-elevada:0 1px 1px rgb(0 0 0/.5),0 0 1px rgb(0 0 0/.6);
+    --ds-sombra-sobreposta:0 8px 12px rgb(0 0 0/.45),0 0 1px rgb(0 0 0/.6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ds-texto:#dfe3ea; --ds-texto-sutil:#aeb6c3; --ds-texto-mais-sutil:#8a93a3; --ds-texto-inverso:#10141a; --ds-link:#7aa7f5;
+  --ds-fundo-pagina:#15191f; --ds-superficie:#1d222a; --ds-superficie-elevada:#232933; --ds-fundo-neutro:#2b313b;
+  --ds-fundo-neutro-hover:#353c48; --ds-fundo-marca:#6e9ff2; --ds-fundo-marca-hover:#8db3f5; --ds-fundo-selecionado:#1c2b45;
+  --ds-borda:#39414d; --ds-borda-forte:#6b7585; --ds-borda-foco:#7aa7f5;
+  --ds-sucesso-fundo:#163323; --ds-sucesso-texto:#8fdcab; --ds-sucesso-borda:#4cb377;
+  --ds-alerta-fundo:#3a2c0b; --ds-alerta-texto:#f5cd6a; --ds-alerta-borda:#c99a20;
+  --ds-perigo-fundo:#3f1c19; --ds-perigo-texto:#f7a89f; --ds-perigo-borda:#e0675b;
+  --ds-info-fundo:#1c2b45; --ds-info-texto:#a9c6f8; --ds-info-borda:#6e9ff2;
+  --ds-neutro-fundo:#2b313b; --ds-neutro-texto:#c3cad5; --ds-neutro-borda:#6b7585;
+  --ds-descoberta-fundo:#2c2145; --ds-descoberta-texto:#cdb5f7;
+  --ds-sombra-elevada:0 1px 1px rgb(0 0 0/.5),0 0 1px rgb(0 0 0/.6);
+  --ds-sombra-sobreposta:0 8px 12px rgb(0 0 0/.45),0 0 1px rgb(0 0 0/.6);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--ds-fundo-pagina); color:var(--ds-texto);
+  font:14px/20px ui-sans-serif,-apple-system,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",sans-serif; }
+h1 { font-size:24px; line-height:28px; margin:0; font-weight:600; }
+h2 { font-size:16px; line-height:20px; margin:0; font-weight:600; }
+h3 { font-size:12px; line-height:16px; margin:0 0 8px; font-weight:600; color:var(--ds-texto-sutil); text-transform:none; }
+p { margin:0; }
+a { color:var(--ds-link); }
+button, input, select, textarea { font:inherit; color:inherit; }
+:focus-visible { outline:2px solid var(--ds-borda-foco); outline-offset:2px; }
+
+.topo { position:sticky; top:0; z-index:5; height:56px; display:flex; align-items:center; gap:16px; padding:0 16px;
+  background:var(--ds-superficie); border-bottom:1px solid var(--ds-borda); }
+.topo .marca { font-weight:600; font-size:16px; white-space:nowrap; }
+.topo .espaco { flex:1; }
+.topo .quem { color:var(--ds-texto-sutil); white-space:nowrap; }
+.quadro { display:grid; grid-template-columns:260px minmax(0,1fr); min-height:calc(100vh - 56px); }
+nav.menu { border-right:1px solid var(--ds-borda); background:var(--ds-superficie); padding:12px 8px; overflow:auto;
+  position:sticky; top:56px; height:calc(100vh - 56px); }
+nav.menu .grupo { margin:12px 8px 4px; font-size:12px; font-weight:600; color:var(--ds-texto-mais-sutil); }
+nav.menu a { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 8px; border-radius:4px;
+  color:var(--ds-texto-sutil); text-decoration:none; }
+nav.menu a:hover { background:var(--ds-fundo-neutro); color:var(--ds-texto); }
+nav.menu a[aria-current="page"] { background:var(--ds-fundo-selecionado); color:var(--ds-link); font-weight:600; }
+nav.menu a .ponto { width:8px; height:8px; border-radius:50%; background:var(--ds-borda); flex:none; }
+nav.menu a .ponto.real { background:var(--ds-sucesso-borda); }
+.seletor { display:none; }
+main { padding:24px; max-width:1100px; width:100%; min-width:0; }
+.cabeca { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:20px; }
+.cabeca .sub { color:var(--ds-texto-sutil); margin-top:4px; }
+.faixa { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; padding:8px 12px; border-radius:4px;
+  background:var(--ds-fundo-neutro); color:var(--ds-texto-sutil); font-size:12px; line-height:16px; }
+
+.cartao { background:var(--ds-superficie-elevada); border-radius:8px; box-shadow:var(--ds-sombra-elevada); padding:16px; }
+.grade { display:grid; gap:16px; }
+.g2 { grid-template-columns:repeat(2,minmax(0,1fr)); } .g3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.g4 { grid-template-columns:repeat(4,minmax(0,1fr)); }
+.g2a { grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); } .g2b { grid-template-columns:minmax(0,1fr) minmax(0,1.3fr); } .g2c { grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); }
+.linha { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.entre { display:flex; flex-wrap:wrap; gap:8px; align-items:flex-start; justify-content:space-between; }
+.sutil { color:var(--ds-texto-sutil); } .mais-sutil { color:var(--ds-texto-mais-sutil); }
+.peq { font-size:12px; line-height:16px; }
+.sep { border:0; border-top:1px solid var(--ds-borda); margin:16px 0; }
+.mt { margin-top:16px; } .mt8 { margin-top:8px; }
+
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:4px; height:32px; padding:0 12px; border-radius:4px;
+  border:0; font-weight:500; cursor:pointer; background:var(--ds-fundo-neutro); color:var(--ds-texto); white-space:nowrap; }
+.btn:hover { background:var(--ds-fundo-neutro-hover); }
+.btn.pri { background:var(--ds-fundo-marca); color:var(--ds-texto-inverso); } .btn.pri:hover { background:var(--ds-fundo-marca-hover); }
+.btn.sut { background:transparent; color:var(--ds-texto-sutil); } .btn.sut:hover { background:var(--ds-fundo-neutro); }
+.btn.per { background:var(--ds-perigo-borda); color:var(--ds-texto-inverso); }
+.btn.ia { background:var(--ds-descoberta-fundo); color:var(--ds-descoberta-texto); }
+
+.loz { display:inline-flex; align-items:center; gap:4px; max-width:208px; padding:2px 6px; border-radius:4px; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis; font-size:12px; line-height:16px; font-weight:600; }
+.sucesso { background:var(--ds-sucesso-fundo); color:var(--ds-sucesso-texto); }
+.alerta { background:var(--ds-alerta-fundo); color:var(--ds-alerta-texto); }
+.perigo { background:var(--ds-perigo-fundo); color:var(--ds-perigo-texto); }
+.info { background:var(--ds-info-fundo); color:var(--ds-info-texto); }
+.neutro { background:var(--ds-neutro-fundo); color:var(--ds-neutro-texto); }
+.descoberta { background:var(--ds-descoberta-fundo); color:var(--ds-descoberta-texto); }
+
+.msg { display:flex; gap:12px; padding:16px; border-radius:4px; }
+.msg b.ic { font-weight:700; }
+.campo { display:grid; gap:4px; }
+.campo label { font-size:12px; line-height:16px; font-weight:600; color:var(--ds-texto-sutil); }
+.campo input, .campo select, .campo textarea { min-height:32px; padding:4px 8px; border-radius:4px; border:2px solid var(--ds-borda);
+  background:var(--ds-superficie); }
+.campo input:hover, .campo select:hover, .campo textarea:hover { border-color:var(--ds-borda-forte); }
+.campo .ajuda { font-size:12px; line-height:16px; color:var(--ds-texto-mais-sutil); }
+.form { display:grid; gap:12px; }
+
+table { width:100%; border-collapse:collapse; }
+th { text-align:left; font-size:12px; line-height:16px; font-weight:600; color:var(--ds-texto-sutil);
+  border-bottom:2px solid var(--ds-borda); padding:8px; }
+td { border-bottom:1px solid var(--ds-borda); padding:8px; vertical-align:middle; }
+tr:hover td { background:var(--ds-fundo-neutro); }
+.rolagem { overflow-x:auto; }
+.num { text-align:right; font-variant-numeric:tabular-nums; }
+
+.abas { display:flex; gap:4px; border-bottom:2px solid var(--ds-borda); margin-bottom:16px; overflow-x:auto; }
+.abas span { padding:8px 12px; color:var(--ds-texto-sutil); font-weight:500; white-space:nowrap; margin-bottom:-2px; }
+.abas span.ativa { color:var(--ds-link); border-bottom:2px solid var(--ds-link); }
+.barra { height:8px; border-radius:4px; background:var(--ds-fundo-neutro); overflow:hidden; }
+.barra i { display:block; height:100%; background:var(--ds-fundo-marca); }
+.kpi .valor { font-size:24px; line-height:28px; font-weight:600; margin-top:4px; }
+
+/* Árvore de desdobramento */
+.arvore ul { list-style:none; margin:0; padding-left:24px; border-left:1px solid var(--ds-borda); }
+.arvore > ul { padding-left:0; border-left:0; }
+.arvore li { margin:8px 0; }
+.no { display:inline-flex; flex-wrap:wrap; gap:8px; align-items:center; padding:8px 12px; border-radius:8px;
+  background:var(--ds-superficie-elevada); box-shadow:var(--ds-sombra-elevada); }
+
+/* Kanban */
+.kanban { display:grid; grid-template-columns:repeat(5,minmax(200px,1fr)); gap:12px; overflow-x:auto; }
+.coluna { background:var(--ds-fundo-neutro); border-radius:8px; padding:8px; display:grid; gap:8px; align-content:start; }
+.coluna h3 { margin:4px 4px 0; }
+
+/* Espinha de peixe 6M */
+.espinha { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)) 180px; grid-template-rows:auto 40px auto; gap:8px 12px; align-items:stretch; }
+.espinha .m { background:var(--ds-superficie-elevada); box-shadow:var(--ds-sombra-elevada); border-radius:8px; padding:8px 12px; }
+.espinha .m ul { margin:4px 0 0; padding-left:18px; }
+.espinha .eixo { grid-column:1 / 4; grid-row:2; align-self:center; height:4px; background:var(--ds-borda-forte); border-radius:2px; }
+.espinha .cabeca-peixe { grid-column:4; grid-row:1 / 4; align-self:center; padding:12px; border-radius:8px; }
+.raiz { font-weight:600; }
+
+/* TV */
+.tv { background:#0f1318; color:#eef1f5; border-radius:8px; padding:24px; }
+.tv .grande { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+.tv .bloco { border-radius:8px; padding:16px; background:#1b2129; }
+.tv .bloco .v { font-size:36px; line-height:40px; font-weight:700; margin-top:8px; }
+
+.chat { display:grid; gap:12px; }
+.bolha { padding:12px; border-radius:8px; max-width:640px; }
+.bolha.eu { background:var(--ds-fundo-selecionado); justify-self:end; }
+.bolha.ia { background:var(--ds-superficie-elevada); box-shadow:var(--ds-sombra-elevada); }
+
+@media (max-width: 900px) {
+  .quadro { grid-template-columns:minmax(0,1fr); }
+  .g2a, .g2b, .g2c { grid-template-columns:1fr; }
+  nav.menu { display:none; }
+  .seletor { display:block; padding:12px 16px 0; }
+  .seletor select { width:100%; min-height:32px; border-radius:4px; border:2px solid var(--ds-borda); background:var(--ds-superficie); padding:4px 8px; }
+  main { padding:16px; }
+  .g2, .g3, .g4 { grid-template-columns:1fr; }
+  .tv .grande { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .espinha { grid-template-columns:1fr; grid-template-rows:none; }
+  .espinha .m { grid-row:auto !important; }
+  .espinha .eixo { display:none; } .espinha .cabeca-peixe { grid-column:auto; grid-row:auto; }
+  .topo .quem { display:none; }
+}
+</style>
+</head>
+<body>
+<header class="topo">
+  <span class="marca">Sistema de Gestão PDCA</span>
+  <span class="loz info">Protótipo navegável</span>
+  <span class="espaco"></span>
+  <span class="quem">Ana · Núcleo de Atendimento</span>
+  <button class="btn sut" id="tema" type="button" aria-label="Alternar tema claro e escuro">◐ Tema</button>
+</header>
+<div class="seletor"><label class="campo"><span class="peq sutil">Tela</span><select id="seletor" aria-label="Escolher tela"></select></label></div>
+<div class="quadro">
+  <nav class="menu" id="menu" aria-label="Telas por fatia"></nav>
+  <main id="tela" tabindex="-1"></main>
+</div>
+<script>
+// Dados fictícios. Cada tela cita a história da spec que a motiva; o que não for F00 é protótipo e muda com a spec aprovada.
+const MESES = ["nov","dez","jan","fev","mar","abr","mai","jun","jul","ago","set","out"];
+const FAROL = {
+  verde: ["sucesso","✔","No alvo"], amarelo: ["alerta","!","Atenção"],
+  vermelho: ["perigo","✖","Fora do alvo"], sem_dado: ["neutro","–","Sem dado"],
+};
+const IND = [
+  { cod:"IND-01", nome:"Índice de satisfação do cliente", un:"%", meta:80, pol:"maior_melhor", farol:"vermelho",
+    serie:[82,83,81,84,80,79,81,82,78,77,76,70.5], resp:"Ana" },
+  { cod:"IND-02", nome:"Tempo médio de resposta", un:"h", meta:24, pol:"menor_melhor", farol:"amarelo",
+    serie:[22,21,23,24,22,23,24,25,24,23,24,25], resp:"Carlos" },
+  { cod:"IND-03", nome:"Chamados resolvidos no 1º contato", un:"%", meta:65, pol:"maior_melhor", farol:"verde",
+    serie:[58,60,61,62,63,64,66,65,67,68,69,71], resp:"Ana" },
+  { cod:"IND-04", nome:"Custo por atendimento", un:"R$", meta:38, pol:"menor_melhor", farol:"verde",
+    serie:[41,40,40,39,39,38,37,37,36,36,35,35], resp:"Eva" },
+  { cod:"IND-05", nome:"Absenteísmo da equipe", un:"%", meta:3, pol:"menor_melhor", farol:"sem_dado",
+    serie:[2.8,3.1,2.9,2.5,2.7,3.0,2.6,2.4,2.9,3.2,2.8,null], resp:"Carlos" },
+];
+const num = (v) => v === null || v === undefined ? "—" : String(v).replace(".", ",");
+const farol = (f) => `<span class="loz ${FAROL[f][0]}"><span aria-hidden="true">${FAROL[f][1]}</span>${FAROL[f][2]}</span>`;
+const loz = (papel, texto) => `<span class="loz ${papel}">${texto}</span>`;
+const btn = (texto, tipo = "") => `<button type="button" class="btn ${tipo}">${texto}</button>`;
+const msg = (papel, icone, titulo, texto) =>
+  `<div class="msg ${papel}" role="${papel === "perigo" || papel === "alerta" ? "alert" : "status"}"><b class="ic" aria-hidden="true">${icone}</b><div><p><b>${titulo}</b></p><p>${texto}</p></div></div>`;
+const campo = (rotulo, valor = "", extra = {}) => {
+  const id = "c" + Math.random().toString(36).slice(2, 8);
+  const ajuda = extra.ajuda ? `<span class="ajuda">${extra.ajuda}</span>` : "";
+  let ctl;
+  if (extra.opcoes) ctl = `<select id="${id}">${extra.opcoes.map((o) => `<option${o === valor ? " selected" : ""}>${o}</option>`).join("")}</select>`;
+  else if (extra.area) ctl = `<textarea id="${id}" rows="${extra.area}">${valor}</textarea>`;
+  else ctl = `<input id="${id}" value="${valor}" ${extra.tipo ? `type="${extra.tipo}"` : ""}>`;
+  return `<div class="campo"><label for="${id}">${rotulo}</label>${ctl}${ajuda}</div>`;
+};
+const tabela = (cab, linhas, numericas = []) => `<div class="rolagem"><table><thead><tr>${cab
+  .map((c, i) => `<th${numericas.includes(i) ? ' class="num"' : ""}>${c}</th>`).join("")}</tr></thead><tbody>${linhas
+  .map((l) => `<tr>${l.map((c, i) => `<td${numericas.includes(i) ? ' class="num"' : ""}>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+function serie(valores, meta, largura = 220, altura = 48) {
+  const v = valores.filter((x) => x !== null), min = Math.min(...v, meta) * 0.95, max = Math.max(...v, meta) * 1.05;
+  const x = (i) => (i / (valores.length - 1)) * (largura - 8) + 4, y = (n) => altura - 4 - ((n - min) / (max - min)) * (altura - 8);
+  const pts = valores.map((n, i) => (n === null ? null : `${x(i).toFixed(1)},${y(n).toFixed(1)}`)).filter(Boolean).join(" ");
+  const ult = valores.map((n, i) => [n, i]).filter(([n]) => n !== null).pop();
+  return `<svg width="${largura}" height="${altura}" viewBox="0 0 ${largura} ${altura}" role="img" aria-label="Série de 12 meses; meta ${num(meta)}">
+    <line x1="4" x2="${largura - 4}" y1="${y(meta)}" y2="${y(meta)}" stroke="var(--ds-borda-forte)" stroke-dasharray="4 3"/>
+    <polyline points="${pts}" fill="none" stroke="var(--ds-fundo-marca)" stroke-width="2"/>
+    <circle cx="${x(ult[1])}" cy="${y(ult[0])}" r="3.5" fill="var(--ds-fundo-marca)"/></svg>`;
+}
+const cartaoIndicador = (i, lancar = true) => `<article class="cartao">
+  <div class="entre"><div><h2><span class="sutil">${i.cod}</span> · ${i.nome}</h2>
+  <p class="sutil mt8">Meta: <span style="color:var(--ds-texto)">${num(i.meta)} ${i.un}</span> &nbsp; Valor em 10/2026:
+  <span style="color:var(--ds-texto)">${i.serie[11] === null ? "sem lançamento" : num(i.serie[11]) + " " + i.un}</span></p></div>${farol(i.farol)}</div>
+  ${lancar ? `<hr class="sep"><div class="linha" style="align-items:flex-end">${campo("Período", "outubro de 2026")}${campo("Valor", "")}${btn("Lançar", "pri")}</div>` : ""}
+</article>`;
+
+const TELAS = [
+  // F00 — implementadas
+  { f:"F00", id:"escolher", nome:"Escolher usuário", real:true, hist:"F00 · história 1",
+    html: () => `<div class="grade g2">${[["Ana","Núcleo de Atendimento"],["Bruno","Financeiro"],["Carlos","Núcleo de Atendimento"],["Duda","Diretoria"],["Eva","Escritório de gestão"],["Root","TI"]]
+      .map(([n, s]) => `<button type="button" class="cartao" style="text-align:left;border:0;cursor:pointer"><b>${n}</b><br><span class="sutil">${s}</span></button>`).join("")}</div>`,
+    titulo:"Entrar", sub:"Versão local, sem senha: escolha com qual colaborador quer usar o sistema." },
+  { f:"F00", id:"meus", nome:"Meus indicadores", real:true, hist:"F00 · histórias 2 e 3",
+    titulo:"Meus indicadores", sub:"Olá, Ana.",
+    html: () => `<div class="grade">${cartaoIndicador(IND[0])}
+      ${cartaoIndicador(IND[2])}
+      ${msg("perigo","✖","Informe a justificativa","O período 10/2026 já tem valor. Para corrigir, diga o motivo da correção.")}</div>` },
+
+  // F01
+  { f:"F01", id:"painel-setor", nome:"Painel do setor", hist:"F01 · história 6",
+    titulo:"Painel · Núcleo de Atendimento", sub:"Ciclo 2026 · outubro de 2026", acoes: btn("Exportar") + btn("Lançar medições", "pri"),
+    html: () => `<div class="grade g4">${[["No alvo","2","sucesso"],["Atenção","1","alerta"],["Fora do alvo","1","perigo"],["Sem dado","1","neutro"]]
+      .map(([t, v, p]) => `<div class="cartao kpi"><span class="loz ${p}">${t}</span><div class="valor">${v}</div><p class="peq sutil">indicadores</p></div>`).join("")}</div>
+      <div class="cartao mt">${tabela(["Indicador","Responsável","Meta","Out/2026","Farol","Últimos 12 meses"],
+        IND.map((i) => [`<b>${i.cod}</b> · ${i.nome}`, i.resp, `${num(i.meta)} ${i.un}`, i.serie[11] === null ? "—" : `${num(i.serie[11])} ${i.un}`, farol(i.farol), serie(i.serie, i.meta, 160, 36)]), [2,3])}</div>` },
+  { f:"F01", id:"setores", nome:"Setores", hist:"F01 · história 1",
+    titulo:"Setores", sub:"Estrutura da organização", acoes: btn("Novo setor", "pri"),
+    html: () => `<div class="grade g2a"><div class="cartao">${tabela(["Setor","Sigla","Setor pai","Gestor","Situação"],[
+      ["Diretoria Executiva","DIREX","—","Duda",loz("sucesso","Ativo")],["Núcleo de Atendimento","NAT","DIREX","Carlos",loz("sucesso","Ativo")],
+      ["Atendimento Regional Sul","NAT-SUL","NAT","Carlos",loz("sucesso","Ativo")],["Financeiro","FIN","DIREX","Bruno",loz("sucesso","Ativo")],
+      ["Escritório de gestão","NGTI","DIREX","Eva",loz("sucesso","Ativo")],["Compras (antigo)","COMP","FIN","—",loz("neutro","Inativo")]])}</div>
+      <div class="cartao"><h2>Novo setor</h2><div class="form mt">${campo("Nome","Atendimento Regional Norte")}${campo("Sigla","NAT-NORTE")}
+      ${campo("Setor pai","Núcleo de Atendimento",{opcoes:["Diretoria Executiva","Núcleo de Atendimento","Financeiro"]})}${campo("Gestor","Carlos",{opcoes:["Carlos","Ana","Duda"]})}
+      ${campo("Unidade","Recife")}<div class="linha">${btn("Salvar","pri")}${btn("Cancelar","sut")}</div></div></div></div>` },
+  { f:"F01", id:"colaboradores", nome:"Colaboradores", hist:"F01 · história 2",
+    titulo:"Colaboradores", sub:"Quem usa o sistema", acoes: btn("Importar CSV") + btn("Novo colaborador", "pri"),
+    html: () => `<div class="linha" style="margin-bottom:12px">${campo("Buscar","",{ajuda:"Nome, e-mail ou setor"})}${campo("Setor","Todos",{opcoes:["Todos","Núcleo de Atendimento","Financeiro"]})}${campo("Situação","Ativo",{opcoes:["Todos","Ativo","Afastado","Desligado"]})}</div>
+      <div class="cartao">${tabela(["Nome","E-mail","Setor","Cargo","Gestor","Situação",""],[
+      ["Ana","ana@exemplo.org","Núcleo de Atendimento","Analista","Carlos",loz("sucesso","Ativo"),btn("Editar","sut")],
+      ["Bruno","bruno@exemplo.org","Financeiro","Gerente","Duda",loz("sucesso","Ativo"),btn("Editar","sut")],
+      ["Carlos","carlos@exemplo.org","Núcleo de Atendimento","Coordenador","Duda",loz("sucesso","Ativo"),btn("Editar","sut")],
+      ["Fábio","fabio@exemplo.org","Núcleo de Atendimento","Assistente","Carlos",loz("alerta","Afastado"),btn("Editar","sut")],
+      ["Gil","gil@exemplo.org","Financeiro","Analista","Bruno",loz("neutro","Desligado"),btn("Editar","sut")]])}</div>` },
+  { f:"F01", id:"tipos", nome:"Tipos de indicador", hist:"F01 · história 3",
+    titulo:"Tipos de indicador", sub:"As 5 dimensões que classificam cada indicador", acoes: btn("Novo tipo", "pri"),
+    html: () => `<div class="cartao">${tabela(["Tipo","Nível","Natureza","Polaridade","Consolidação","Origem"],[
+      ["Resultado estratégico","estratégico","controle","maior é melhor","média ponderada","calculado"],
+      ["Resultado do setor","setor","controle","maior é melhor","média","manual"],
+      ["Prazo do setor","setor","controle","menor é melhor","média","integração"],
+      ["Causa operacional","time","verificação","faixa","último","manual"],
+      ["Meta individual","individual","controle","maior é melhor","nenhuma","manual"]])}</div>` },
+  { f:"F01", id:"ciclo", nome:"Ciclo e objetivos", hist:"F01 · história 4",
+    titulo:"Ciclo 2026", sub:"01/01/2026 a 31/12/2026", acoes: loz("sucesso","Vigente") + " " + btn("Novo objetivo", "pri"),
+    html: () => `<div class="grade g2">${[["Clientes",[["OE-01","Encantar o cliente em cada atendimento"],["OE-02","Ampliar a base atendida"]]],
+      ["Finanças",[["OE-03","Sustentabilidade financeira"]]],["Processos",[["OE-04","Processos padronizados e sem retrabalho"],["OE-05","Atendimento digital de ponta a ponta"]]],
+      ["Pessoas",[["OE-06","Equipe engajada e desenvolvida"]]]].map(([p, os]) => `<div class="cartao"><h3>${p}</h3>${os
+      .map(([c, t]) => `<div class="entre" style="padding:8px 0;border-top:1px solid var(--ds-borda)"><span><b>${c}</b> · ${t}</span>${btn("Abrir","sut")}</div>`).join("")}</div>`).join("")}</div>
+      ${msg("info","i","Perspectivas do mapa","Clientes, Finanças, Processos e Pessoas. A lista final ainda está em [DECIDIR] na spec da F01.")}` },
+  { f:"F01", id:"indicador-form", nome:"Cadastro de indicador", hist:"F01 · história 5",
+    titulo:"Novo indicador do setor", sub:"Núcleo de Atendimento",
+    html: () => `<div class="cartao" style="max-width:760px"><div class="form">
+      <div class="grade g2">${campo("Código","IND-06")}${campo("Nome","Reclamações procedentes")}</div>
+      <div class="grade g2">${campo("Tipo","Resultado do setor",{opcoes:["Resultado do setor","Prazo do setor","Causa operacional"]})}${campo("Objetivo","OE-01 · Encantar o cliente",{opcoes:["OE-01 · Encantar o cliente","OE-04 · Processos padronizados"]})}</div>
+      ${campo("Fórmula","Reclamações procedentes ÷ atendimentos × 100",{area:2})}
+      <div class="grade g3">${campo("Unidade","%")}${campo("Periodicidade","Mensal",{opcoes:["Mensal","Trimestral"]})}${campo("Responsável","Ana",{opcoes:["Ana","Carlos"]})}</div>
+      <hr class="sep"><h2>Meta do ciclo</h2>
+      <div class="grade g3">${campo("Polaridade","Menor é melhor",{opcoes:["Maior é melhor","Menor é melhor","Faixa"]})}${campo("Meta","2")}${campo("Tolerância (%)","5",{ajuda:"Faixa do amarelo. Padrão 5% da meta."})}</div>
+      <div class="linha">${btn("Salvar indicador","pri")}${btn("Cancelar","sut")}</div></div></div>` },
+
+  // F02
+  { f:"F02", id:"arvore", nome:"Árvore do objetivo", hist:"F02 · história 3",
+    titulo:"OE-01 · Encantar o cliente em cada atendimento", sub:"Árvore de desdobramento com o farol de outubro de 2026", acoes: btn("Expandir tudo") + btn("Desdobrar", "pri"),
+    html: () => `<div class="arvore"><ul><li><span class="no"><b>EST-01</b> Satisfação geral do cliente ${farol("amarelo")} <span class="peq sutil">estratégico · média ponderada</span></span>
+      <ul><li><span class="no"><b>IND-01</b> Satisfação do cliente · NAT ${farol("vermelho")} <span class="peq sutil">peso 60%</span></span>
+        <ul><li><span class="no"><b>IND-01.1</b> Satisfação · Regional Sul ${farol("vermelho")}</span></li>
+            <li><span class="no"><b>IND-01.2</b> Satisfação · Regional Norte ${farol("verde")}</span>
+              <ul><li><span class="no"><b>IND-01.2.1</b> Meta individual · Ana ${farol("verde")}</span></li></ul></li></ul></li>
+      <li><span class="no"><b>IND-07</b> Satisfação no canal digital ${farol("verde")} <span class="peq sutil">peso 40%</span></span></li></ul></li></ul></div>` },
+  { f:"F02", id:"desdobrar", nome:"Desdobrar indicador", hist:"F02 · história 2",
+    titulo:"Desdobrar IND-01", sub:"Satisfação do cliente · Núcleo de Atendimento · consolidação: média ponderada",
+    html: () => `<div class="cartao">${tabela(["Filho","Setor ou pessoa","Responsável","Meta","Peso (%)",""],[
+      [`<input value="IND-01.1" aria-label="Código" style="width:90px">`,"Regional Sul","Carlos",`<input value="80" style="width:60px" aria-label="Meta">`,`<input value="50" style="width:60px" aria-label="Peso">`,btn("Remover","sut")],
+      [`<input value="IND-01.2" aria-label="Código" style="width:90px">`,"Regional Norte","Ana",`<input value="80" style="width:60px" aria-label="Meta">`,`<input value="50" style="width:60px" aria-label="Peso">`,btn("Remover","sut")]])}
+      <div class="entre mt"><span>${btn("Adicionar filho")}</span><span class="linha"><span class="sutil">Soma dos pesos: <b>100%</b></span>${btn("Salvar desdobramento","pri")}</span></div></div>` },
+  { f:"F02", id:"aceite", nome:"Aceite de metas", hist:"F02 · histórias 4 e 5",
+    titulo:"Aceite de metas", sub:"Ciclo 2026",
+    html: () => `<div class="abas"><span class="ativa">Minhas metas (1)</span><span>Da minha equipe (3 pendentes)</span></div>
+      <div class="cartao"><div class="entre"><div><h2>IND-01.2.1 · Satisfação · meta individual</h2><p class="sutil mt8">Meta 82% · gestor: Carlos</p></div>${loz("alerta","Pendente")}</div>
+      <div class="form mt">${campo("Comentário (obrigatório para contestar)","",{area:2})}<div class="linha">${btn("Aceitar meta","pri")}${btn("Contestar")}</div></div></div>
+      <div class="cartao mt">${tabela(["Colaborador","Indicador","Meta","Situação",""],[["Ana","IND-01.2.1","82%",loz("alerta","Pendente"),""],
+      ["Fábio","IND-02.1","24 h",loz("perigo","Contestada"),btn("Ver comentário","sut")],["Carlos","IND-01.1","80%",loz("sucesso","Aceita"),""]])}</div>` },
+
+  // F03
+  { f:"F03", id:"anomalias", nome:"Anomalias", hist:"F03 · histórias 1 e 2",
+    titulo:"Anomalias", sub:"Núcleo de Atendimento", acoes: btn("Abrir anomalia", "pri"),
+    html: () => `<div class="kanban">${[["Rascunho",[["IND-02","Tempo de resposta acima da meta em out","regra"]]],
+      ["Em análise",[["IND-01","Queda da satisfação na Regional Sul","regra"]]],["Plano definido",[["IND-04","Custo por atendimento subiu em ago","manual"]]],
+      ["Em verificação",[["IND-03","Retrabalho no primeiro contato","manual"]]],["Encerradas",[["IND-05","Absenteísmo em mar","regra"]]]]
+      .map(([c, cs]) => `<div class="coluna"><h3>${c} · ${cs.length}</h3>${cs.map(([i, t, o]) => `<div class="cartao"><p class="peq sutil">${i} · out/2026</p><p><b>${t}</b></p><div class="linha mt8">${loz(o === "regra" ? "info" : "neutro", o === "regra" ? "Aberta por regra" : "Manual")}</div></div>`).join("")}</div>`).join("")}</div>` },
+  { f:"F03", id:"anomalia", nome:"Análise de anomalia (6M)", hist:"F03 · histórias 3 e 4",
+    titulo:"Queda da satisfação na Regional Sul", sub:"IND-01 · outubro de 2026 · 70,5% contra meta de 80%", acoes: loz("info","Em análise") + " " + btn("Sugerir causas com IA", "ia") + btn("Aprovar causa raiz", "pri"),
+    html: () => `<div class="espinha">${[["Método",["Roteiro de atendimento desatualizado"]],["Máquina",["Sistema de chamados lento às segundas"]],["Mão de obra",["<span class='raiz'>★ 3 atendentes novos sem treinamento</span>"]],
+      ["Material",["—"]],["Medida",["Pesquisa enviada só a quem reclamou"]],["Meio ambiente",["Pico de demanda após mudança de tarifa"]]]
+      .map(([m, cs], k) => `<div class="m" style="grid-row:${k < 3 ? 1 : 3}"><h3>${m}</h3><ul>${cs.map((c) => `<li>${c}</li>`).join("")}</ul></div>`).join("")}
+      <div class="eixo"></div><div class="cabeca-peixe perigo"><b>Efeito</b><br>Satisfação 70,5% (meta 80%)</div></div>
+      <div class="cartao mt">${campo("Nova causa","",{})}<div class="linha mt8">${campo("Categoria","Mão de obra",{opcoes:["Método","Máquina","Mão de obra","Material","Medida","Meio ambiente"]})}<label class="linha"><input type="checkbox"> Causa raiz</label>${btn("Adicionar causa")}</div></div>` },
+  { f:"F03", id:"plano", nome:"Plano de ação", hist:"F03 · histórias 4 e 6",
+    titulo:"Plano de ação · Queda da satisfação", sub:"Causa raiz: 3 atendentes novos sem treinamento", acoes: loz("sucesso","Aprovado") + " " + btn("Adicionar ação", "pri"),
+    html: () => `<div class="cartao">${tabela(["Ação","Responsável","Prazo","Situação"],[
+      ["Treinar os 3 atendentes no roteiro atual","Carlos","15/11/2026",loz("info","Em andamento")],
+      ["Atualizar o roteiro de atendimento","Ana","30/11/2026",loz("neutro","Aberta")],
+      ["Acompanhar atendimento em dupla por 2 semanas","Carlos","05/11/2026",loz("perigo","Vencida")],
+      ["Revisar público da pesquisa de satisfação","Eva","20/10/2026",loz("sucesso","Concluída")]])}</div>
+      <div class="cartao mt"><h2>Verificação de eficácia</h2><p class="sutil mt8">Disponível após o fechamento de novembro de 2026.</p>
+      <div class="linha mt">${btn("Encerrar como eficaz")}${btn("Encerrar como ineficaz")}</div></div>` },
+  { f:"F03", id:"minhas-acoes", nome:"Minhas ações", hist:"F03 · história 5",
+    titulo:"Minhas ações", sub:"Ana · ações de planos e de rituais",
+    html: () => `${msg("alerta","!","1 ação vence em 3 dias","Atualizar o roteiro de atendimento vence em 30/11/2026.")}
+      <div class="cartao mt">${tabela(["Ação","Origem","Prazo","Situação",""],[["Atualizar o roteiro de atendimento","Anomalia · IND-01","30/11/2026",loz("neutro","Aberta"),btn("Iniciar","sut")],
+      ["Publicar POP de triagem","Ritual · reunião de resultados","10/12/2026",loz("info","Em andamento"),btn("Concluir","sut")]])}</div>` },
+
+  // F04
+  { f:"F04", id:"pops", nome:"POPs do setor", hist:"F04 · histórias 2 e 5",
+    titulo:"Padrões (POP)", sub:"Núcleo de Atendimento", acoes: btn("Novo POP", "pri"),
+    html: () => `<div class="grade g2b"><div class="cartao">${tabela(["POP","Versão","Situação"],[
+      ["<b>POP-01</b> Triagem de chamados","v3",loz("sucesso","Vigente")],["<b>POP-02</b> Atendimento ao cliente novo","v1",loz("alerta","Rascunho")],
+      ["<b>POP-03</b> Fechamento mensal de indicadores","v2",loz("sucesso","Vigente")],["<b>POP-01</b> Triagem de chamados","v2",loz("neutro","Obsoleto")]])}</div>
+      <article class="cartao"><div class="entre"><h2>POP-01 · Triagem de chamados · v3</h2>${loz("sucesso","Vigente")}</div>
+      <p class="peq sutil mt8">Dono: Carlos · DTO mensal · ligado ao IND-02 · origem: anomalia de mar/2026</p><hr class="sep">
+      <h3>Tarefa crítica</h3><p>Classificar cada chamado em até 15 minutos da abertura.</p>
+      <h3 class="mt">Passos</h3><ol style="margin:0;padding-left:20px"><li>Ler o chamado e identificar o tipo.</li><li>Aplicar a tabela de prioridade.</li><li>Encaminhar à fila certa e avisar o cliente.</li></ol>
+      <div class="linha mt">${btn("Nova versão")}${btn("Histórico","sut")}</div></article></div>` },
+  { f:"F04", id:"dto", nome:"Agenda e registro de DTO", hist:"F04 · histórias 3 e 4",
+    titulo:"DTO · Diagnóstico do trabalho operacional", sub:"Núcleo de Atendimento",
+    html: () => `<div class="grade g2"><div class="cartao"><h2>Agenda</h2><div class="mt">${tabela(["POP","Colaborador","Previsto","Situação"],[
+      ["POP-01","Fábio","05/10/2026",loz("perigo","Atrasado")],["POP-01","Ana","05/11/2026",loz("neutro","Agendado")],["POP-03","Carlos","10/11/2026",loz("neutro","Agendado")],
+      ["POP-01","Ana","05/10/2026",loz("sucesso","Aderente")]])}</div></div>
+      <div class="cartao"><h2>Registrar DTO</h2><div class="form mt">${campo("POP","POP-01 · Triagem de chamados",{opcoes:["POP-01 · Triagem de chamados"]})}${campo("Colaborador","Fábio",{opcoes:["Fábio","Ana"]})}
+      ${campo("Resultado","Não aderente",{opcoes:["Aderente","Não aderente"]})}${campo("Desvios observados","Pulou a etapa de avisar o cliente em 2 de 5 chamados.",{area:3})}
+      <div class="linha">${btn("Registrar","pri")}</div></div></div></div>` },
+  { f:"F04", id:"licoes", nome:"Lições aprendidas", hist:"F04 · história 6",
+    titulo:"Lições aprendidas", sub:"Registradas ao encerrar anomalias",
+    html: () => `<div class="grade">${[["Treinar antes de pôr na linha de frente","IND-01 · out/2026",["treinamento","atendimento"]],
+      ["Pesquisa enviada a todos, não só a quem reclama","IND-01 · abr/2026",["medida"]]]
+      .map(([t, o, tags]) => `<div class="cartao"><p><b>${t}</b></p><p class="peq sutil mt8">${o}</p><div class="linha mt8">${tags.map((g) => loz("neutro", g)).join("")}</div></div>`).join("")}</div>` },
+
+  // F05
+  { f:"F05", id:"rituais", nome:"Agenda de rituais", hist:"F05 · histórias 1 e 2",
+    titulo:"Rituais", sub:"Núcleo de Atendimento · novembro de 2026", acoes: btn("Configurar tipos") + btn("Agendar ritual", "pri"),
+    html: () => `<div class="cartao">${tabela(["Data","Ritual","Cadência","Conduzido por","Situação",""],[
+      ["03/11 08:30","Bom Dia","diária","Carlos",loz("sucesso","Realizado"),btn("Ver ata","sut")],
+      ["05/11 14:00","Reunião de resultados","mensal","Carlos",loz("info","Agendado"),btn("Abrir","sut")],
+      ["12/11 10:00","Cumbuca","semanal","Ana",loz("info","Agendado"),btn("Abrir","sut")],
+      ["30/11 09:00","Feedback","semestral","Carlos",loz("neutro","Cancelado"),""]])}</div>` },
+  { f:"F05", id:"ritual", nome:"Ritual: pauta e ata", hist:"F05 · histórias 3 e 4",
+    titulo:"Reunião de resultados · 05/11/2026", sub:"Pauta por exceção gerada às 08:00", acoes: btn("Rascunho de ata com IA", "ia") + btn("Encerrar e enviar ata", "pri"),
+    html: () => `<div class="grade g2c"><div class="cartao"><h2>Pauta por exceção</h2><div class="mt">${tabela(["Item","Situação"],[
+      ["IND-01 Satisfação do cliente",farol("vermelho")],["IND-02 Tempo médio de resposta",farol("amarelo")],["Anomalia IND-02 sem causa raiz",loz("alerta","Sem causa raiz")],
+      ["Ação: acompanhamento em dupla",loz("perigo","Vencida")],["Meta IND-02.1 de Fábio",loz("perigo","Contestada")],["DTO POP-01 de Fábio",loz("perigo","Atrasado")]])}</div></div>
+      <div class="grade"><div class="cartao"><h2>Presença</h2><div class="linha mt8">${["Carlos","Ana","Eva"].map((n) => `<label class="linha"><input type="checkbox" checked> ${n}</label>`).join("")}<label class="linha"><input type="checkbox"> Fábio</label></div></div>
+      <div class="cartao"><h2>Ata</h2><div class="form mt">${campo("Anotações","Satisfação caiu pela entrada de 3 atendentes novos. Treinamento já começou.",{area:4})}
+      ${campo("Decisão","Reforçar a triagem às segundas")}<label class="linha"><input type="checkbox" checked> Virar ação · responsável Ana · prazo 20/11</label>${btn("Adicionar decisão")}</div></div></div></div>` },
+
+  // F06
+  { f:"F06", id:"integracoes", nome:"Integração com o Jira", hist:"F06 · histórias 2 e 3",
+    titulo:"Integrações", sub:"Fontes automáticas de medição", acoes: btn("Nova integração", "pri"),
+    html: () => `<div class="grade g2"><div class="cartao"><div class="entre"><h2>Jira · Service Desk</h2>${loz("sucesso","Ativa")}</div>
+      <div class="form mt">${campo("URL","https://exemplo.atlassian.net")}${campo("Token","••••••••••••",{ajuda:"Guardado como segredo; nunca é exibido de novo."})}${btn("Testar conexão")}</div></div>
+      <div class="cartao"><h2>Mapear indicador</h2><div class="form mt">${campo("Indicador","IND-02 · Tempo médio de resposta",{opcoes:["IND-02 · Tempo médio de resposta"]})}
+      ${campo("Consulta JQL",'project = SD AND resolved >= startOfMonth(-1) AND resolved < startOfMonth()',{area:2})}
+      ${campo("Transformação","Soma de campo ÷ contagem",{opcoes:["Contagem","Percentual entre duas consultas","Soma de campo","Soma de campo ÷ contagem"]})}
+      ${campo("Agendamento","Dia 1, às 06:00",{opcoes:["Dia 1, às 06:00","Diário, às 06:00"]})}<div class="linha">${btn("Pré-visualizar valor")}${btn("Salvar","pri")}</div></div></div></div>` },
+  { f:"F06", id:"credenciais", nome:"Credenciais de API e webhooks", hist:"F06 · histórias 1 e 4",
+    titulo:"API pública", sub:"Credenciais, webhooks e documentação", acoes: btn("Abrir documentação OpenAPI") + btn("Nova credencial", "pri"),
+    html: () => `<div class="cartao"><h2>Credenciais</h2><div class="mt">${tabela(["Nome","Escopos","Setor","Expira em","Situação",""],[
+      ["Painel BI","indicador:ler, painel:ler","Toda a organização","31/12/2026",loz("sucesso","Ativa"),btn("Revogar","sut")],
+      ["Robô de medição","medicao:registrar","Núcleo de Atendimento","30/11/2026",loz("alerta","Expira em 30 dias"),btn("Revogar","sut")],
+      ["Teste antigo","indicador:ler","Financeiro","01/06/2026",loz("neutro","Revogada"),""]])}</div></div>
+      <div class="cartao mt"><h2>Webhooks</h2><div class="mt">${tabela(["URL","Eventos","Última entrega"],[
+      ["https://bi.exemplo.org/gancho","FarolMudou, AcaoVenceu",loz("sucesso","200 · há 2 h")],["https://chat.exemplo.org/hook","AnomaliaAberta",loz("perigo","Falhou · nova tentativa em 5 min")]])}</div></div>` },
+
+  // F07
+  { f:"F07", id:"mcp", nome:"Assistente de IA (MCP leitura)", hist:"F07 · histórias 1, 2 e 4",
+    titulo:"Assistente de IA", sub:"Conecte seu assistente ao servidor MCP do sistema", acoes: btn("Copiar configuração", "pri"),
+    html: () => `<div class="grade g2"><div class="cartao"><h2>Exemplo de conversa</h2><div class="chat mt">
+      <div class="bolha eu">Quais indicadores do meu setor estão fora do alvo e por quê?</div>
+      <div class="bolha ia">Em outubro, <b>IND-01</b> está fora do alvo (70,5% contra 80%). A anomalia aberta aponta como causa raiz a entrada de 3 atendentes sem treinamento; o plano tem 1 ação vencida. <b>IND-02</b> está em atenção (25 h contra 24 h).<p class="peq sutil mt8">Fontes: consultar_indicador IND-01, anomalia de out/2026</p></div></div></div>
+      <div class="cartao"><h2>Acessos ao MCP</h2><div class="mt">${tabela(["Quando","Usuário","Modelo","Ferramenta"],[["28/10 10:42","Ana","assistente externo","consultar_indicador"],
+      ["28/10 10:41","Ana","assistente externo","listar_pendencias"],["27/10 16:03","Carlos","assistente externo","consultar_arvore"]])}</div></div></div>` },
+
+  // F08
+  { f:"F08", id:"diagnostico", nome:"Diagnóstico da gestão", hist:"F08 · histórias 2 e 3",
+    titulo:"Diagnóstico · Núcleo de Atendimento", sub:"2º quadrimestre de 2026 · parcial em 28/10", acoes: btn("Autodiagnóstico") + btn("Fechar diagnóstico", "pri"),
+    html: () => `<div class="grade g3"><div class="cartao kpi"><p class="sutil">Nota parcial</p><div class="valor">72</div><div class="barra mt8"><i style="width:72%"></i></div></div>
+      <div class="cartao kpi"><p class="sutil">Itens automáticos</p><div class="valor">8 de 10</div><p class="peq sutil">calculados pelos dados</p></div>
+      <div class="cartao kpi"><p class="sutil">Itens manuais</p><div class="valor">2 pendentes</div><p class="peq sutil">avaliação do escritório</p></div></div>
+      <div class="cartao mt">${tabela(["Item","Tipo","Peso","Nota","O que falta"],[
+      ["Indicadores com medição em dia","automático","15","100",loz("sucesso","Nada")],["Anomalias com causa raiz em até 10 dias","automático","15","60","2 anomalias atrasadas"],
+      ["Ações dentro do prazo","automático","10","75","1 ação vencida"],["DTO realizados no prazo","automático","10","50","1 DTO atrasado"],
+      ["Qualidade das análises de causa","manual","10","—",loz("alerta","Avaliar")]], [2,3])}</div>` },
+  { f:"F08", id:"itens-diag", nome:"Itens do diagnóstico", hist:"F08 · história 1",
+    titulo:"Itens do diagnóstico", sub:"Critérios, regras e pesos", acoes: btn("Novo item", "pri"),
+    html: () => `<div class="cartao">${tabela(["Código","Critério","Tipo","Regra","Peso","Situação"],[
+      ["D-01","Indicadores com medição em dia","automático","medicao_em_dia","15",loz("sucesso","Ativo")],
+      ["D-02","Anomalias com causa raiz em até 10 dias","automático","causa_raiz_no_prazo","15",loz("sucesso","Ativo")],
+      ["D-07","Qualidade das análises de causa","manual","—","10",loz("sucesso","Ativo")],["D-09","Uso da Gestão à Vista","manual","—","5",loz("neutro","Inativo")]],[4])}</div>` },
+
+  // F09
+  { f:"F09", id:"sugestao", nome:"Sugestões da IA", hist:"F09 · histórias 1 e 2",
+    titulo:"Causas sugeridas pela IA", sub:"Anomalia: queda da satisfação na Regional Sul", acoes: loz("descoberta","Rascunho da IA"),
+    html: () => `${msg("info","i","Sugestão, não decisão","Nada é gravado até alguém aceitar. Cada sugestão cita os casos usados.")}
+      <div class="grade mt">${[["Mão de obra","Atendentes novos sem o treinamento do POP-02","Anomalia IND-01 de abr/2025 · Lição \"Treinar antes de pôr na linha de frente\"",92],
+      ["Método","Roteiro desatualizado após mudança de tarifa","POP-01 v2 (obsoleto)",71]].map(([c, t, e, s]) =>
+      `<div class="cartao"><div class="entre"><div><p class="peq sutil">${c} · semelhança ${s}%</p><p><b>${t}</b></p><p class="peq sutil mt8">Evidência: ${e}</p></div>
+      <div class="linha">${btn("Aceitar","pri")}${btn("Editar e aceitar")}${btn("Descartar","sut")}</div></div></div>`).join("")}</div>` },
+  { f:"F09", id:"qualidade-ia", nome:"Qualidade das sugestões", hist:"F09 · história 5",
+    titulo:"Qualidade das sugestões", sub:"Últimos 90 dias",
+    html: () => `<div class="cartao">${tabela(["Tipo","Sugestões","Aceitas","Editadas","Descartadas","Avaliação média"],[
+      ["Causas","48","52%","27%","21%","4,1"],["Plano","19","42%","42%","16%","3,8"],["Ata","31","61%","32%","7%","4,4"],["Pauta","12","83%","8%","8%","4,6"]],[1,2,3,4,5])}</div>` },
+
+  // F10
+  { f:"F10", id:"importacao", nome:"Importação de planilha", hist:"F10 · história 2",
+    titulo:"Importar indicadores e histórico", sub:"Modelo \"Indicadores Operacionais\", uma aba por setor",
+    html: () => `<div class="cartao"><div class="linha">${campo("Arquivo","indicadores-2025.xlsx")}${btn("Gerar prévia")}</div></div>
+      <div class="grade g3 mt">${[["Indicadores","42","sucesso"],["Medições","1.380","sucesso"],["Erros","3","perigo"]].map(([t, v, p]) => `<div class="cartao kpi"><span class="loz ${p}">${t}</span><div class="valor">${v}</div></div>`).join("")}</div>
+      <div class="cartao mt"><h2>Erros que impedem gravar</h2><div class="mt">${tabela(["Aba","Linha","Problema"],[["NAT","14","Meta vazia para indicador com polaridade faixa"],
+      ["FIN","8","Responsável \"J. Silva\" não encontrado"],["FIN","22","Período \"13/2025\" inválido"]])}</div>
+      <div class="linha mt">${btn("Baixar relatório")}<button class="btn pri" disabled style="opacity:.4">Gravar importação</button></div></div>` },
+  { f:"F10", id:"tv", nome:"Gestão à Vista (TV)", hist:"F10 · história 3",
+    titulo:"Gestão à Vista · TV da recepção", sub:"Sem metas individuais e sem nomes; atualiza a cada 5 minutos",
+    html: () => `<div class="tv"><div class="entre"><h1 style="font-size:28px;line-height:32px">Núcleo de Atendimento · outubro de 2026</h1><span style="opacity:.7">tela 1 de 3</span></div>
+      <div class="grande mt">${IND.slice(0, 4).map((i) => { const c = { verde:"#4cb377", amarelo:"#e0b100", vermelho:"#e0675b", sem_dado:"#8a93a3" }[i.farol];
+      return `<div class="bloco" style="border-top:6px solid ${c}"><p style="opacity:.8">${i.cod} · ${i.nome}</p><div class="v">${num(i.serie[11])} ${i.un}</div><p style="opacity:.8">meta ${num(i.meta)} ${i.un} · ${FAROL[i.farol][1]} ${FAROL[i.farol][2]}</p></div>`; }).join("")}</div></div>` },
+  { f:"F10", id:"consolidado", nome:"Painel consolidado", hist:"F10 · história 4",
+    titulo:"Painel consolidado", sub:"Todos os setores · outubro de 2026",
+    html: () => `<div class="cartao">${tabela(["Setor","No alvo","Atenção","Fora","Sem dado","SDCA","Diagnóstico"],[
+      ["Núcleo de Atendimento","2","1","1","1",loz("alerta","POP sem DTO"),"72"],["Financeiro","5","0","0","0",loz("sucesso","Padronizado"),"88"],
+      ["Escritório de gestão","3","1","0","0",loz("sucesso","Padronizado"),"91"],["Regional Sul","1","0","2","0",loz("neutro","Sem padrão"),"54"]],[1,2,3,4,6])}</div>` },
+  { f:"F10", id:"lgpd", nome:"LGPD: desligados", hist:"F10 · história 5",
+    titulo:"Dados de colaborador desligado", sub:"Exportar e anonimizar",
+    html: () => `<div class="cartao" style="max-width:640px"><div class="entre"><div><h2>Gil</h2><p class="sutil">Financeiro · desligado em 30/09/2026</p></div>${loz("neutro","Desligado")}</div>
+      <hr class="sep"><p>A exportação reúne cadastro, medições lançadas, ações e presenças. A anonimização troca o nome por um código e apaga e-mail; o histórico dos indicadores continua.</p>
+      ${msg("alerta","!","Ação irreversível","Depois de anonimizar não é possível recuperar os dados pessoais.")}
+      <div class="linha mt">${btn("Exportar dados")}${btn("Anonimizar","per")}</div></div>` },
+];
+
+const NOMES_FATIA = { F00:"Esqueleto andante", F01:"Meta e farol", F02:"Desdobramento e aceite", F03:"Anomalia e plano",
+  F04:"Rotina SDCA", F05:"Rituais e atas", F06:"API e Jira", F07:"MCP de leitura", F08:"Diagnóstico", F09:"IA sugere", F10:"Escala" };
+const menu = document.getElementById("menu"), seletor = document.getElementById("seletor"), area = document.getElementById("tela");
+let grupo = "";
+for (const t of TELAS) {
+  if (t.f !== grupo) {
+    grupo = t.f;
+    menu.insertAdjacentHTML("beforeend", `<div class="grupo">${t.f} · ${NOMES_FATIA[t.f]}</div>`);
+    seletor.insertAdjacentHTML("beforeend", `<optgroup label="${t.f} · ${NOMES_FATIA[t.f]}"></optgroup>`);
+  }
+  menu.insertAdjacentHTML("beforeend", `<a href="#${t.id}"><span>${t.nome}</span><span class="ponto${t.real ? " real" : ""}" title="${t.real ? "Implementada" : "Protótipo"}"></span></a>`);
+  seletor.lastElementChild.insertAdjacentHTML("beforeend", `<option value="${t.id}">${t.nome}</option>`);
+}
+function mostrar() {
+  const t = TELAS.find((x) => "#" + x.id === location.hash) || TELAS[0];
+  menu.querySelectorAll("a").forEach((a) => { if (a.getAttribute("href") === "#" + t.id) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  seletor.value = t.id;
+  area.innerHTML = `<div class="faixa">${t.real ? loz("sucesso","Implementada") : loz("info","Protótipo")}<span>${t.hist}</span>
+    <span>· ${t.real ? "equivalente à tela do sistema (make up → localhost:3000)" : "dados fictícios; o desenho final segue a spec aprovada"}</span></div>
+    <div class="cabeca"><div><h1>${t.titulo}</h1>${t.sub ? `<p class="sub">${t.sub}</p>` : ""}</div>${t.acoes ? `<div class="linha">${t.acoes}</div>` : ""}</div>${t.html()}`;
+  document.title = `${t.nome} · Protótipo PDCA`;
+}
+seletor.addEventListener("change", () => (location.hash = seletor.value));
+addEventListener("hashchange", () => { mostrar(); area.focus(); });
+document.getElementById("tema").addEventListener("click", () => {
+  const raiz = document.documentElement, escuro = raiz.dataset.theme ? raiz.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  raiz.dataset.theme = escuro ? "light" : "dark";
+  try { localStorage.setItem("tema-prototipo", raiz.dataset.theme); } catch {}
+});
+try { const salvo = localStorage.getItem("tema-prototipo"); if (salvo) document.documentElement.dataset.theme = salvo; } catch {}
+mostrar();
+</script>
+</body>
+</html>

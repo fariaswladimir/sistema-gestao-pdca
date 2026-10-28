@@ -257,7 +257,8 @@ summary small {{ display:block; color:var(--mudo); font-size:12px; }}
 <main>
   <h1>EAP · Sistema de Gestão PDCA e SDCA</h1>
   <p class="meta">Gerada em {gerado} · branch <code>{escape(branch)}</code> @ <code>{escape(commit)}</code>
-    · fonte: <code>specs/README.md</code> e <code>specs/Fxx-*/tasks.md</code></p>
+    · fonte: <code>specs/README.md</code> e <code>specs/Fxx-*/tasks.md</code>
+    · <a href="prototipo/index.html">protótipo das telas</a></p>
 
   <div class="grade">
     <section class="cartao" aria-labelledby="t-andamento">

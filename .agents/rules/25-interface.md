@@ -48,3 +48,9 @@ Componentes de domínio (`components/dominio/`) compõem os base. Exemplo: `Faro
 - Status nunca só por cor: texto claro e, quando ajudar, ícone (vale para o farol).
 - Foco sempre visível (`CLASSE_FOCO`); alvos clicáveis com no mínimo 32 px de altura.
 - Erro de formulário com `role="alert"`; confirmação com `aria-live="polite"`.
+
+## Protótipo navegável (docs/prototipo/index.html)
+Todas as telas previstas de F00 a F10, num só arquivo HTML que abre sem servidor, com os mesmos tokens.
+- Ao escrever ou revisar uma spec, ajuste a tela correspondente no protótipo (é o rascunho visual que o humano aprova).
+- Ao implementar uma tela, marque-a com `real: true` e mantenha o protótipo fiel à tela real.
+- Token novo em `globals.css` também entra no `<style>` do protótipo.
