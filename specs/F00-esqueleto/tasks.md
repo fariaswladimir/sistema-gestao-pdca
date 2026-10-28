@@ -23,7 +23,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
 - [x] T9 Lançamento de medição. `PUT /indicadores/{id}/medicoes/{periodo}`, farol gravado, regra de justificativa,
       auditoria na mesma transação e `MedicaoRegistrada` no outbox.
       Pronto quando: os 5 exemplos de farol e o cenário de relançamento (422 + auditoria 70 → 82) verdes; `make test-slice F=F00` todo verde.
-- [ ] T10 Worker da fila. Laço com `SKIP LOCKED` e registro de handlers.
+- [x] T10 Worker da fila. Laço com `SKIP LOCKED` e registro de handlers.
       Pronto quando: teste de integração mostra `MedicaoRegistrada` saindo de `pendente` para `concluida`.
 - [ ] T11 Matriz executável. Gerador a partir de `matriz.yaml` e do registro rota → ação.
       Pronto quando: `make test-perms` verde para os 7 perfis × 2 ações × (próprio, de outro responsável).
