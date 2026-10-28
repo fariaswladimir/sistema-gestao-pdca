@@ -87,6 +87,10 @@ Estão todas em `decisoes.md`. As desta verificação são:
 - O realm de dev passou a ter ids fixos de usuário. A causa foi que, ao recriar o contêiner do Keycloak (H2 do modo dev), a ana ganhou outro `sub`,
   a API recusou o revínculo do e-mail (proteção contra tomada de conta) e 3 E2E falharam no ambiente local.
 
+## Validação do dono do produto
+2026-10-28: o dono do produto testou no ambiente local (login, lançamento, farol, justificativa, escopo por usuário)
+e validou.
+
 ## Pendências para fechar a F00
 1. **Servidor de homologação (T16):** preparar a VM, tratar o achado alto acima, instalar o runner, ligar `HOMOLOG_ATIVA`
    e configurar os monitores e o e-mail no Kuma. Depois, provar: merge na `main` → nova versão em `/saude`, e API parada → alerta.
