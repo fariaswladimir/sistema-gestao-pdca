@@ -101,6 +101,23 @@ jobs:
             ghcr.io/${{ github.repository }}-${{ matrix.imagem.nome }}:${{ github.sha }}
             ghcr.io/${{ github.repository }}-${{ matrix.imagem.nome }}:main
 
-  # TODO(T16): deploy-homologacao em runner self-hosted no servidor interno
-  # (docker compose pull && up -d && alembic upgrade head && conferir /saude).
-  # Depende de: VM com Docker, nome interno e certificado HTTPS.
+  # Roda no servidor interno (runner self-hosted com o rótulo `homologacao`), sem abrir porta para fora.
+  # Desligado até a variável do repositório HOMOLOG_ATIVA=true (ver infra/homolog/README.md).
+  deploy-homologacao:
+    needs: publicar
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.HOMOLOG_ATIVA == 'true'
+    runs-on: [self-hosted, homologacao]
+    environment:
+      name: homologacao
+      url: https://${{ vars.HOMOLOG_HOST }}
+    concurrency: {group: deploy-homologacao, cancel-in-progress: false}
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - run: infra/homolog/implantar.sh
+        env: {VERSAO: "${{ github.sha }}"}
+      - if: always()
+        run: docker logout ghcr.io

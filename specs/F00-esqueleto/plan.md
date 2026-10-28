@@ -87,7 +87,7 @@ Nenhum nesta fatia.
 ## Infra
 - `backend/Dockerfile` e `frontend/Dockerfile` multi-stage; `APP_VERSION` como build arg.
 - `docker-compose.yml` (dev): healthchecks; Keycloak 26 em `start-dev --import-realm`; `KC_HOSTNAME=http://localhost:8080`.
-- `docker-compose.homolog.yml` (sobreposição): Keycloak em modo `start` com banco próprio no mesmo Postgres;
+- `docker-compose.homolog.yml` (arquivo próprio; ver `decisoes.md`): Keycloak em modo `start` com banco próprio no mesmo Postgres;
   proxy reverso Caddy com HTTPS; imagens vindas do GHCR; Uptime Kuma checando `/saude` e a web, com alerta por e-mail.
   Erros: logs JSON das aplicações (nível `error`) consultáveis no servidor; alerta quando `/saude` falha.
 - CI (GitHub Actions): job `check` (lint, typecheck, testes, matriz, contrato, aceitação); job `e2e` sobe o compose

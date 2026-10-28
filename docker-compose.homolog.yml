@@ -1,0 +1,147 @@
+# Homologação no servidor interno. Imagens vindas do GHCR (job `publicar`); segredos e nome do servidor
+# vêm do arquivo de ambiente fora do repositório (ver infra/homolog/homolog.env.example).
+# Um só nome público: https://HOMOLOG_HOST/ (web), /auth (Keycloak) e :3443 (Uptime Kuma).
+# Dentro da rede do compose o nome aponta para o Caddy, então web e navegador usam o mesmo emissor.
+# Uso: infra/homolog/implantar.sh (ver infra/homolog/README.md).
+name: gestao-homolog
+
+x-logs: &logs
+  logging:
+    driver: json-file
+    options: {max-size: 10m, max-file: "5"}
+
+x-backend: &backend
+  <<: *logs
+  image: ${IMAGEM_PREFIXO:-ghcr.io/fariaswladimir/sistema-gestao-pdca}-api:${VERSAO:-main}
+  restart: unless-stopped
+  environment:
+    DATABASE_URL: postgresql+asyncpg://gestao:${DB_PASSWORD}@db:5432/gestao
+    LOG_JSON: "true"
+    TZ_REGRAS: ${TZ_REGRAS:-America/Recife}
+    TOLERANCIA_PADRAO_PCT: ${TOLERANCIA_PADRAO_PCT:-5}
+    OIDC_ISSUER: https://${HOMOLOG_HOST}/auth/realms/gestao
+    OIDC_JWKS_URL: http://keycloak:8080/auth/realms/gestao/protocol/openid-connect/certs
+    OIDC_AUDIENCE: gestao-api
+  depends_on:
+    db: {condition: service_healthy}
+
+services:
+  db:
+    <<: *logs
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gestao
+      POSTGRES_USER: gestao
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD:?defina KC_DB_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./infra/homolog/postgres:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gestao -d gestao"]
+      interval: 5s
+      retries: 20
+
+  keycloak:
+    <<: *logs
+    image: quay.io/keycloak/keycloak:26.0
+    restart: unless-stopped
+    command: start --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KC_HOSTNAME: https://${HOMOLOG_HOST:?defina HOMOLOG_HOST}/auth
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
+      KC_HEALTH_ENABLED: "true"
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?defina KEYCLOAK_ADMIN_PASSWORD}
+      # lidos pelos marcadores ${...} do realm importado (só na primeira subida)
+      HOMOLOG_HOST: ${HOMOLOG_HOST}
+      AUTH_KEYCLOAK_SECRET: ${AUTH_KEYCLOAK_SECRET:?defina AUTH_KEYCLOAK_SECRET}
+      KC_SENHA_INICIAL: ${KC_SENHA_INICIAL:?defina KC_SENHA_INICIAL}
+    volumes: ["./infra/homolog/keycloak:/opt/keycloak/data/import:ro"]
+    depends_on:
+      db: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9000 && printf 'GET /auth/health/ready HTTP/1.0\\r\\n\\r\\n' >&3 && grep -q UP <&3"]
+      interval: 10s
+      retries: 30
+      start_period: 60s
+
+  api:
+    <<: *backend
+    depends_on:
+      db: {condition: service_healthy}
+      keycloak: {condition: service_healthy}
+
+  worker:
+    <<: *backend
+    command: python -m app.motor.worker
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os,sys,time; sys.exit(time.time() - os.path.getmtime('/tmp/worker-batimento') > 60)"]
+      interval: 10s
+      retries: 3
+      start_period: 10s
+
+  web:
+    <<: *logs
+    image: ${IMAGEM_PREFIXO:-ghcr.io/fariaswladimir/sistema-gestao-pdca}-web:${VERSAO:-main}
+    restart: unless-stopped
+    environment:
+      AUTH_SECRET: ${AUTH_SECRET:?defina AUTH_SECRET}
+      AUTH_URL: https://${HOMOLOG_HOST}
+      AUTH_TRUST_HOST: "true"
+      AUTH_KEYCLOAK_ID: gestao-web
+      AUTH_KEYCLOAK_SECRET: ${AUTH_KEYCLOAK_SECRET}
+      AUTH_KEYCLOAK_ISSUER: https://${HOMOLOG_HOST}/auth/realms/gestao
+      API_URL: http://api:8000
+      # a web busca o emissor pelo Caddy; confia na CA interna dele (ou na CA da organização)
+      NODE_EXTRA_CA_CERTS: ${NODE_EXTRA_CA_CERTS:-/ca/root.crt}
+    volumes: ["caddyca:/ca:ro", "${CERTS_DIR:-/opt/gestao-pdca/certs}:/certs:ro"]
+    depends_on:
+      api: {condition: service_healthy}
+      caddy: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/',{redirect:'manual'}).then(r=>process.exit(r.status<500?0:1),()=>process.exit(1))"]
+      interval: 10s
+      retries: 10
+
+  caddy:
+    <<: *logs
+    image: caddy:2.10.0
+    restart: unless-stopped
+    environment:
+      HOMOLOG_HOST: ${HOMOLOG_HOST}
+      CADDY_TLS: ${CADDY_TLS:-internal}
+    ports: ["80:80", "443:443", "3443:3443"]
+    volumes:
+      - ./infra/homolog/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddydata:/data
+      - caddyca:/ca
+      - ${CERTS_DIR:-/opt/gestao-pdca/certs}:/certs:ro
+    networks:
+      default:
+        aliases: ["${HOMOLOG_HOST}"]
+    healthcheck:
+      # com CA interna, só fica saudável depois de gerar a raiz; publica uma cópia legível (só o certificado
+      # público) para a web confiar, sem expor /data, onde ficam as chaves
+      test: ["CMD-SHELL", "[ \"$$CADDY_TLS\" != internal ] || install -m 644 /data/caddy/pki/authorities/local/root.crt /ca/root.crt"]
+      interval: 5s
+      retries: 20
+
+  kuma:
+    <<: *logs
+    image: louislam/uptime-kuma:1.23.16
+    restart: unless-stopped
+    volumes: ["kumadata:/app/data"]
+
+volumes:
+  dbdata:
+  caddydata:
+  caddyca:
+  kumadata:

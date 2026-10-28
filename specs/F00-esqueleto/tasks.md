@@ -38,3 +38,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
 - [ ] T16 Homologação. `docker-compose.homolog.yml` (Keycloak em modo produção, Caddy HTTPS, Uptime Kuma),
       runner self-hosted e job `deploy-homologacao` com migração e checagem de `/saude`.
       Pronto quando: um merge na `main` aparece em homologação com a nova versão em `/saude` e o Uptime Kuma alerta quando a API para.
+      Andamento: código pronto e ensaiado localmente (`homolog.localhost`, CA interna): sobe saudável, migra, semeia,
+      confere a versão, login com troca obrigatória de senha, lançamento com farol e logout pelo HTTPS.
+      Falta, no servidor: preparar a VM e o runner, ligar `HOMOLOG_ATIVA` e configurar os monitores do Kuma
+      (passos em `infra/homolog/README.md`).

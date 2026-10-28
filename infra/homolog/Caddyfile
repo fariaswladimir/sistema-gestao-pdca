@@ -1,0 +1,26 @@
+# CADDY_TLS: "internal" (CA própria do Caddy) ou "/certs/<cert>.pem /certs/<chave>.pem" (certificado da organização).
+{
+	skip_install_trust
+}
+
+# explícito: com dois sites no mesmo nome, o redirecionamento automático escolhia a porta do Kuma
+http://{$HOMOLOG_HOST} {
+	redir https://{host}{uri} permanent
+}
+
+https://{$HOMOLOG_HOST} {
+	tls {$CADDY_TLS}
+	encode gzip
+	handle /auth/* {
+		reverse_proxy keycloak:8080
+	}
+	handle {
+		reverse_proxy web:3000
+	}
+}
+
+# Uptime Kuma (monitoramento)
+{$HOMOLOG_HOST}:3443 {
+	tls {$CADDY_TLS}
+	reverse_proxy kuma:3001
+}
