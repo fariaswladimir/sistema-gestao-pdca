@@ -1,4 +1,4 @@
-"""Envelope único de erro `{codigo, detalhe, erros?}` (domínio, validação e framework), documentado no OpenAPI."""
+"""Envelope único de erro `{codigo, detalhe, erros?}` (domínio, validação e framework), no OpenAPI."""
 
 from typing import Any
 
