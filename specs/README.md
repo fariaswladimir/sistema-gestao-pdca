@@ -33,6 +33,17 @@ Status possíveis: Rascunho → Aprovada → Em implementação → Verificada �
 
 Gates: **G1** esqueleto no ar (após F00) · **G2** PDCA rodando em 1 setor piloto (após F03) · **G3** rotina sem planilha (após F06).
 
+## Em andamento
+O agente mantém esta seção atualizada; `make eap` gera `docs/eap.html` a partir dela, da tabela acima e dos `tasks.md`.
+
+- Fatia: F01
+- Etapa: 1
+- Próximos passos: Revisar a spec F01 pelas diretrizes de versão (sem cenários de permissão) | Levar as questões [DECIDIR] da F01 ao dono do produto | Planejar a F01 após a aprovação
+- Bloqueios: Decidir a partir de qual fatia entra o login (F02 ou F03) | Homologação adiada até haver servidor (T16)
+
+Etapas: 1 spec (`/nova-fatia`) · 2 plano (`/planejar-fatia`) · 3 implementação (`/implementar-fatia`) ·
+4 verificação (`/verificar-fatia`) · 5 demo (`/demo-fatia`).
+
 ## Marcadores
 - `[DECIDIR]` questão em aberto que só o humano responde. Fatia não é aprovada com [DECIDIR] pendente.
 - `[SUPOSIÇÃO]` valor provisório adotado para escrever a spec; confirmar na aprovação.

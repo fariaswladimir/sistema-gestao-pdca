@@ -19,8 +19,8 @@ api-client:
 	cd frontend && npm run gerar-cliente-api
 
 lint:
-	$(PYTHON) -m ruff check --config backend/pyproject.toml backend tests conftest.py
-	$(PYTHON) -m ruff format --check --config backend/pyproject.toml backend tests conftest.py
+	$(PYTHON) -m ruff check --config backend/pyproject.toml backend tests scripts conftest.py
+	$(PYTHON) -m ruff format --check --config backend/pyproject.toml backend tests scripts conftest.py
 	cd frontend && npm run lint
 typecheck:
 	cd backend && $(PYTHON) -m mypy app
@@ -35,6 +35,8 @@ test-contract:
 	$(PYTEST) tests/contracts -q
 e2e:
 	cd frontend && npx playwright test
+eap:
+	$(PYTHON) scripts/eap.py
 evals:
 	$(PYTHON) -m tests.evals.rodar
 
@@ -42,4 +44,4 @@ evals:
 check: lint typecheck test test-contract
 	$(PYTEST) tests/acceptance -q
 
-.PHONY: up down migrate migration seed api-client lint typecheck test test-slice test-perms test-contract e2e evals check
+.PHONY: eap up down migrate migration seed api-client lint typecheck test test-slice test-perms test-contract e2e evals check

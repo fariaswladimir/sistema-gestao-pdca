@@ -29,25 +29,20 @@ Prevalecem sobre specs e regras antigas que digam o contrário; ao tocar numa fa
    A matriz de @specs/_perfis-permissoes.md é o alvo futuro; não crie regra de perfil ou escopo nova, e os
    testes de permissão saem do `make check` até lá. Não escreva cenários de 403/404 por perfil nas specs.
 
-## Relatório de situação (obrigatório em toda resposta ao humano)
-Toda resposta termina com o bloco abaixo, atualizado. A EAP é a tabela de fatias de `specs/README.md`;
-o percentual de cada fatia vem das caixas marcadas em `specs/Fxx-*/tasks.md` (fatia sem `tasks.md` aprovado conta 0%).
+## Relatório de situação em HTML (obrigatório em toda resposta ao humano)
+A EAP e a etapa da fatia fina são mostradas sempre na página **`docs/eap.html`**, gerada por `make eap`
+(`scripts/eap.py`, só biblioteca padrão) a partir de:
+- a tabela de fatias de `specs/README.md` (status) e as caixas de `specs/Fxx-*/tasks.md` (percentuais);
+- a seção **"Em andamento"** de `specs/README.md`: fatia, etapa (1 spec · 2 plano · 3 implementação ·
+  4 verificação · 5 demo), próximos passos (até 3, separados por `|`) e bloqueios ou decisões pendentes do humano.
 
-```
-📍 Fatia em andamento: F01 – Meta e farol · etapa 1/5 /nova-fatia (spec em revisão)
-   [■ spec] → [□ plano] → [□ implementação T0/11] → [□ verificação] → [□ demo]
-📊 EAP: F00 94% (15/16) · F01 0% · F02–F10 0% · geral 15/96 tarefas (16%)
-   Gates: G1 esqueleto no ar ⏳ (falta homologação) · G2 □ · G3 □
-➡️ Próximos passos: 1) … 2) … 3) …
-⛔ Bloqueios/decisões pendentes do humano: … (ou "nenhum")
-```
+Ao fim de toda tarefa ou resposta que mude o estado:
+1. Atualize as caixas de `tasks.md`, o status na tabela e a seção "Em andamento" (nunca estime de memória).
+2. Rode `make eap` (no Windows sem `make`: `python scripts/eap.py`).
+3. Termine a resposta com o link para a página e uma linha de resumo, por exemplo:
+   `📊 [EAP](docs/eap.html) · F01 etapa 1/5 Spec · geral 15% · bloqueios: 2`.
 
-Regras do bloco:
-- **Etapas da fatia:** 1 `/nova-fatia` (spec) · 2 `/planejar-fatia` (plano e tarefas) · 3 `/implementar-fatia`
-  (mostrar a tarefa atual, ex.: `T4/11`) · 4 `/verificar-fatia` · 5 `/demo-fatia`. Marque ■ feito, □ a fazer.
-- **Percentuais:** recalcule a partir dos arquivos a cada resposta, sem estimar de memória.
-- **Próximos passos:** no máximo 3, concretos, na ordem em que serão feitos.
-- **Bloqueios:** liste toda pergunta [DECIDIR] ou dependência externa (servidor, credencial, aprovação).
+A página não é versionada (é derivada); quem quiser vê-la roda `make eap` e abre `docs/eap.html` no navegador.
 
 ## Leitura obrigatória antes de qualquer tarefa
 - @specs/README.md (processo e status das fatias)

@@ -10,3 +10,5 @@ playwright-report/
 .mypy_cache/
 .ruff_cache/
 test-results/
+# gerado por `make eap` a partir de specs/
+docs/eap.html
