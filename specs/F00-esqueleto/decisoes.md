@@ -31,3 +31,8 @@
 | 2026-10-28 | `npm run dev` direto no Windows exige `127.0.0.1 keycloak.localhost` no arquivo hosts; no Docker e no Playwright funciona sem isso. | O Node no Windows não resolve `*.localhost`; navegadores e o DNS do Docker resolvem. |
 | 2026-10-28 | O campo de justificativa aparece quando o período atual já tem valor ou quando a API responde `justificativa_obrigatoria`; a regra continua só na API. | A tela não duplica a RN3; para períodos passados ela aprende com a resposta. |
 | 2026-10-28 | O E2E zera `medicao`, `evento_auditoria` e `fila_tarefa` do compose antes de rodar (`E2E_SEM_RESET=1` desliga). | Bateria repetível; nunca apontar o E2E para homologação ou produção sem essa variável. |
+| 2026-10-28 | Versões Python fixadas em `backend/restricoes.txt` (freeze do venv testado), usadas no CI e na imagem. | pytest 9.2.0 saiu no meio da fatia e quebrou o pytest-bdd 9.0.0 só no CI. Atualizar = regenerar e rodar a suíte. |
+| 2026-10-28 | Worker sobrevive a banco indisponível ou sem migração (registra e tenta de novo); serviços com `restart: unless-stopped`. | No primeiro `up` o worker sobe antes da migração e morria. Vale para homologação também. |
+| 2026-10-28 | Healthcheck do worker por arquivo de batimento (< 60 s). | O Compose do runner novo (Ubuntu 26) recusa no `--wait` serviço sem healthcheck; de quebra, worker travado vira `unhealthy`. |
+| 2026-10-28 | Em falha do E2E, o CI publica `compose up`, `ps` e logs como anotação. | Anotações são legíveis pela API sem login; os logs completos exigem token. |
+| 2026-10-28 | T15 fechada com `check` e `e2e` verdes no GitHub (run 40657255562); `publicar` (GHCR) só roda em push na `main` e será confirmado no merge. | |

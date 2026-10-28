@@ -33,7 +33,7 @@ Branch: `fatia/F00-esqueleto`. Cada tarefa termina com testes verdes do que ela 
       Pronto quando: no navegador, `/` sem sessão vai ao login do Keycloak e, após entrar como ana, mostra `/meus-indicadores` com o nome dela.
 - [x] T14 Web: Meus indicadores. Componente `Farol` (cor + ícone + texto), cartões e `LancarMedicao`.
       Pronto quando: `make e2e` verde (login → lançar → ver farol; relançar sem justificativa → erro; sem login → login).
-- [ ] T15 CI. Jobs `check`, `e2e` (com compose) e `publicar` (imagens no GHCR).
+- [x] T15 CI. Jobs `check`, `e2e` (com compose) e `publicar` (imagens no GHCR).
       Pronto quando: um PR mostra `check` e `e2e` verdes; um push na `main` publica as imagens com o SHA como tag.
 - [ ] T16 Homologação. `docker-compose.homolog.yml` (Keycloak em modo produção, Caddy HTTPS, Uptime Kuma),
       runner self-hosted e job `deploy-homologacao` com migração e checagem de `/saude`.
