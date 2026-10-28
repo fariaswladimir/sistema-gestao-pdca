@@ -41,3 +41,7 @@ def test_colaborador_desligado_e_403(cliente: TestClient, engine: Engine) -> Non
     with engine.begin() as con:
         con.execute(text("update colaborador set status = 'desligado'"))
     assert cliente.get("/eu", headers=cabecalho("ana")).status_code == 403
+
+
+def test_erro_traz_codigo_legivel_por_maquina(cliente: TestClient) -> None:
+    assert cliente.get("/eu").json() == {"codigo": "nao_autenticado", "detalhe": "Autenticação necessária."}

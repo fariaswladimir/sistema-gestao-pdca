@@ -126,11 +126,15 @@ def relanca_com(cliente: TestClient, ctx: Contexto, valor: str, justificativa: s
 @then(parsers.parse("recebe resposta {codigo:d}"))
 def recebe_resposta(ctx: Contexto, codigo: int) -> None:
     assert ctx.resposta.status_code == codigo, ctx.resposta.text
+    if codigo >= 400:
+        assert ctx.resposta.json()["codigo"]
 
 
 @then(parsers.parse('recebe resposta {codigo:d} com status "{status}" e versão'))
 def recebe_saude(ctx: Contexto, codigo: int, status: str) -> None:
     assert ctx.resposta.status_code == codigo, ctx.resposta.text
+    if codigo >= 400:
+        assert ctx.resposta.json()["codigo"]
     corpo = ctx.resposta.json()
     assert corpo["status"] == status
     assert corpo["versao"]

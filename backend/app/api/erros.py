@@ -1,4 +1,4 @@
-"""Envelope único de erro `{detalhe, erros?}` (domínio, validação e framework), documentado no OpenAPI."""
+"""Envelope único de erro `{codigo, detalhe, erros?}` (domínio, validação e framework), documentado no OpenAPI."""
 
 from typing import Any
 
@@ -13,6 +13,7 @@ from app.dominio.erros import ErroDominio, NaoAutenticado
 
 
 class ErroSaida(BaseModel):
+    codigo: str
     detalhe: str
     erros: list[dict[str, Any]] | None = None
 
@@ -33,21 +34,23 @@ CORPO_MALFORMADO: dict[int | str, dict[str, Any]] = {400: _resposta("Corpo da re
 async def _tratar_dominio(request: Request, erro: Exception) -> JSONResponse:
     assert isinstance(erro, ErroDominio)
     cabecalhos = {"WWW-Authenticate": "Bearer"} if isinstance(erro, NaoAutenticado) else None
-    corpo = ErroSaida(detalhe=erro.mensagem).model_dump(exclude_none=True)
+    corpo = ErroSaida(codigo=erro.codigo, detalhe=erro.mensagem).model_dump(exclude_none=True)
     return JSONResponse(status_code=erro.status_http, content=corpo, headers=cabecalhos)
 
 
 async def _tratar_validacao(request: Request, erro: Exception) -> JSONResponse:
     assert isinstance(erro, RequestValidationError)
     erros = [{"campo": ".".join(map(str, e["loc"])), "mensagem": e["msg"]} for e in erro.errors()]
-    corpo = ErroSaida(detalhe="Entrada inválida.", erros=jsonable_encoder(erros))
+    corpo = ErroSaida(codigo="entrada_invalida", detalhe="Entrada inválida.", erros=jsonable_encoder(erros))
     return JSONResponse(status_code=422, content=corpo.model_dump())
 
 
 async def _tratar_http(request: Request, erro: Exception) -> JSONResponse:
     """Erros do próprio framework (JSON malformado, 404 de rota, 405) no mesmo envelope."""
     assert isinstance(erro, HTTPException)
-    corpo = ErroSaida(detalhe=str(erro.detail)).model_dump(exclude_none=True)
+    corpo = ErroSaida(codigo=f"http_{erro.status_code}", detalhe=str(erro.detail)).model_dump(
+        exclude_none=True
+    )
     return JSONResponse(status_code=erro.status_code, content=corpo, headers=erro.headers)
 
 
