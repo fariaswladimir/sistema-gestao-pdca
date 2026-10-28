@@ -69,3 +69,20 @@ def test_falha_no_tratador_reagenda_a_tarefa(
     [tarefa] = _tarefas(engine)
     assert (tarefa.status, tarefa.tentativas) == ("pendente", 1)
     assert _processar(url_banco) == 0  # reagendada para depois
+
+
+def test_worker_sobrevive_a_banco_sem_migracao(monkeypatch: pytest.MonkeyPatch) -> None:
+    """No primeiro `up`, o worker sobe antes das migrações: deve registrar o erro e continuar."""
+    chamadas = 0
+
+    async def falhar(*_: Any, **__: Any) -> int:
+        nonlocal chamadas
+        chamadas += 1
+        if chamadas >= 3:
+            raise asyncio.CancelledError
+        raise RuntimeError("relation fila_tarefa does not exist")
+
+    monkeypatch.setattr(worker, "processar_lote", falhar)
+    with pytest.raises(asyncio.CancelledError):
+        asyncio.run(worker.rodar(espera_falha_s=0))
+    assert chamadas == 3

@@ -3,6 +3,7 @@
 # então o emissor dos tokens é o mesmo para o navegador, a web e a API.
 services:
   db:
+    restart: unless-stopped
     image: pgvector/pgvector:pg16
     environment:
       POSTGRES_DB: gestao
@@ -16,6 +17,7 @@ services:
       retries: 20
 
   keycloak:
+    restart: unless-stopped
     image: quay.io/keycloak/keycloak:26.0
     command: start-dev --import-realm
     environment:
@@ -34,6 +36,7 @@ services:
       retries: 30
 
   api:
+    restart: unless-stopped
     build:
       context: ./backend
       args: {APP_VERSION: "${APP_VERSION:-dev}"}
@@ -44,6 +47,7 @@ services:
     ports: ["8000:8000"]
 
   worker:
+    restart: unless-stopped
     build:
       context: ./backend
       args: {APP_VERSION: "${APP_VERSION:-dev}"}
@@ -54,6 +58,7 @@ services:
     healthcheck: {disable: true}
 
   web:
+    restart: unless-stopped
     build:
       context: ./frontend
       args: {APP_VERSION: "${APP_VERSION:-dev}"}

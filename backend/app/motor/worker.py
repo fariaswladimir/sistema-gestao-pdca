@@ -69,7 +69,7 @@ async def _executar(sessao: AsyncSession, tarefa: FilaTarefa) -> None:
             tarefa.executar_em = func.now() + timedelta(seconds=30 * 2**tarefa.tentativas)
 
 
-async def rodar(intervalo_s: float = 2.0) -> None:
+async def rodar(intervalo_s: float = 2.0, espera_falha_s: float = 5.0) -> None:
     config = obter_configuracao()
     configurar_logs(json=config.log_json)
     engine = criar_engine(config.database_url)
@@ -77,7 +77,14 @@ async def rodar(intervalo_s: float = 2.0) -> None:
     log.info("worker_iniciado")
     try:
         while True:
-            if await processar_lote(fabrica) == 0:
+            try:
+                processadas = await processar_lote(fabrica)
+            except Exception:
+                # Banco fora do ar ou ainda sem migração: espera e tenta de novo, sem derrubar o worker.
+                log.exception("worker_ciclo_falhou")
+                await asyncio.sleep(espera_falha_s)
+                continue
+            if processadas == 0:
                 await asyncio.sleep(intervalo_s)
     finally:
         await engine.dispose()
