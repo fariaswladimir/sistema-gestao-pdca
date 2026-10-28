@@ -1,1 +1,158 @@
 @import "tailwindcss";
+
+/*
+ * Tokens de interface, no método do Atlassian Design System (atlassian.design) usado como referência:
+ * nome semântico (papel + propriedade + ênfase), nunca cor crua no componente. Valores nossos;
+ * não usamos pacotes, fontes nem ícones do ADS (a licença restringe o uso a apps do ecossistema Atlassian).
+ * Regras em .agents/rules/25-interface.md.
+ */
+:root {
+  --ds-texto: #1f2733;
+  --ds-texto-sutil: #4a5565;
+  --ds-texto-mais-sutil: #6b7585;
+  --ds-texto-inverso: #ffffff;
+  --ds-link: #1d5fd6;
+
+  --ds-fundo-pagina: #f7f8f9;
+  --ds-superficie: #ffffff;
+  --ds-superficie-elevada: #ffffff;
+  --ds-fundo-neutro: #eef0f3;
+  --ds-fundo-neutro-hover: #e2e5ea;
+  --ds-fundo-marca: #1d5fd6;
+  --ds-fundo-marca-hover: #174eb3;
+  --ds-fundo-selecionado: #e8f0fd;
+
+  --ds-borda: #d5d9e0;
+  --ds-borda-forte: #8a93a3;
+  --ds-borda-foco: #3b7cf0;
+
+  /* Papéis semânticos: sutil (fundo claro) e texto/ícone sobre ele. */
+  --ds-sucesso-fundo: #ddf4e6;
+  --ds-sucesso-texto: #1b6b3c;
+  --ds-sucesso-borda: #2f9a5a;
+  --ds-alerta-fundo: #fff1cc;
+  --ds-alerta-texto: #7a4e00;
+  --ds-alerta-borda: #d69a00;
+  --ds-perigo-fundo: #fde3e1;
+  --ds-perigo-texto: #a12a1f;
+  --ds-perigo-borda: #d9473a;
+  --ds-info-fundo: #e3edfd;
+  --ds-info-texto: #1a4fa8;
+  --ds-info-borda: #3b7cf0;
+  --ds-neutro-fundo: #eef0f3;
+  --ds-neutro-texto: #3e4757;
+  --ds-neutro-borda: #8a93a3;
+
+  --ds-sombra-elevada: 0 1px 1px rgb(23 30 41 / 0.12), 0 0 1px rgb(23 30 41 / 0.24);
+  --ds-sombra-sobreposta: 0 8px 12px rgb(23 30 41 / 0.15), 0 0 1px rgb(23 30 41 / 0.3);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ds-texto: #dfe3ea;
+    --ds-texto-sutil: #aeb6c3;
+    --ds-texto-mais-sutil: #8a93a3;
+    --ds-texto-inverso: #10141a;
+    --ds-link: #7aa7f5;
+
+    --ds-fundo-pagina: #15191f;
+    --ds-superficie: #1d222a;
+    --ds-superficie-elevada: #232933;
+    --ds-fundo-neutro: #2b313b;
+    --ds-fundo-neutro-hover: #353c48;
+    --ds-fundo-marca: #6e9ff2;
+    --ds-fundo-marca-hover: #8db3f5;
+    --ds-fundo-selecionado: #1c2b45;
+
+    --ds-borda: #39414d;
+    --ds-borda-forte: #6b7585;
+    --ds-borda-foco: #7aa7f5;
+
+    --ds-sucesso-fundo: #163323;
+    --ds-sucesso-texto: #8fdcab;
+    --ds-sucesso-borda: #4cb377;
+    --ds-alerta-fundo: #3a2c0b;
+    --ds-alerta-texto: #f5cd6a;
+    --ds-alerta-borda: #c99a20;
+    --ds-perigo-fundo: #3f1c19;
+    --ds-perigo-texto: #f7a89f;
+    --ds-perigo-borda: #e0675b;
+    --ds-info-fundo: #1c2b45;
+    --ds-info-texto: #a9c6f8;
+    --ds-info-borda: #6e9ff2;
+    --ds-neutro-fundo: #2b313b;
+    --ds-neutro-texto: #c3cad5;
+    --ds-neutro-borda: #6b7585;
+
+    --ds-sombra-elevada: 0 1px 1px rgb(0 0 0 / 0.5), 0 0 1px rgb(0 0 0 / 0.6);
+    --ds-sombra-sobreposta: 0 8px 12px rgb(0 0 0 / 0.45), 0 0 1px rgb(0 0 0 / 0.6);
+
+    color-scheme: dark;
+  }
+}
+
+/* Utilitários Tailwind a partir dos tokens: text-texto-sutil, bg-superficie, border-borda, bg-sucesso-fundo... */
+@theme inline {
+  --color-texto: var(--ds-texto);
+  --color-texto-sutil: var(--ds-texto-sutil);
+  --color-texto-mais-sutil: var(--ds-texto-mais-sutil);
+  --color-texto-inverso: var(--ds-texto-inverso);
+  --color-link: var(--ds-link);
+
+  --color-fundo-pagina: var(--ds-fundo-pagina);
+  --color-superficie: var(--ds-superficie);
+  --color-superficie-elevada: var(--ds-superficie-elevada);
+  --color-fundo-neutro: var(--ds-fundo-neutro);
+  --color-fundo-neutro-hover: var(--ds-fundo-neutro-hover);
+  --color-fundo-marca: var(--ds-fundo-marca);
+  --color-fundo-marca-hover: var(--ds-fundo-marca-hover);
+  --color-fundo-selecionado: var(--ds-fundo-selecionado);
+
+  --color-borda: var(--ds-borda);
+  --color-borda-forte: var(--ds-borda-forte);
+  --color-borda-foco: var(--ds-borda-foco);
+
+  --color-sucesso-fundo: var(--ds-sucesso-fundo);
+  --color-sucesso-texto: var(--ds-sucesso-texto);
+  --color-sucesso-borda: var(--ds-sucesso-borda);
+  --color-alerta-fundo: var(--ds-alerta-fundo);
+  --color-alerta-texto: var(--ds-alerta-texto);
+  --color-alerta-borda: var(--ds-alerta-borda);
+  --color-perigo-fundo: var(--ds-perigo-fundo);
+  --color-perigo-texto: var(--ds-perigo-texto);
+  --color-perigo-borda: var(--ds-perigo-borda);
+  --color-info-fundo: var(--ds-info-fundo);
+  --color-info-texto: var(--ds-info-texto);
+  --color-info-borda: var(--ds-info-borda);
+  --color-neutro-fundo: var(--ds-neutro-fundo);
+  --color-neutro-texto: var(--ds-neutro-texto);
+  --color-neutro-borda: var(--ds-neutro-borda);
+
+  --shadow-elevada: var(--ds-sombra-elevada);
+  --shadow-sobreposta: var(--ds-sombra-sobreposta);
+}
+
+/* Tipografia: corpo 14/20 e escala de títulos curta, com a pilha de fontes do sistema. */
+@theme {
+  --font-sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+  --text-corpo: 0.875rem;
+  --text-corpo--line-height: 1.25rem;
+  --text-corpo-pequeno: 0.75rem;
+  --text-corpo-pequeno--line-height: 1rem;
+  --text-titulo-pequeno: 1rem;
+  --text-titulo-pequeno--line-height: 1.25rem;
+  --text-titulo-medio: 1.25rem;
+  --text-titulo-medio--line-height: 1.5rem;
+  --text-titulo-grande: 1.5rem;
+  --text-titulo-grande--line-height: 1.75rem;
+}
+
+body {
+  background: var(--ds-fundo-pagina);
+  color: var(--ds-texto);
+  font-family: var(--font-sans);
+  font-size: var(--text-corpo);
+  line-height: var(--text-corpo--line-height);
+}

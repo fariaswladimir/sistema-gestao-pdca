@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
+import { CLASSE_FOCO } from "@/components/ui/Botao";
+import { MensagemSecao } from "@/components/ui/MensagemSecao";
 import { destinoSeguro, modoLocal } from "@/lib/sessao";
 
 import { escolherUsuario } from "./acoes";
@@ -22,8 +24,8 @@ export default async function EscolherUsuario({
 
   return (
     <section>
-      <h1 className="text-2xl font-semibold">Entrar</h1>
-      <p className="mt-1 text-slate-600">
+      <h1 className="text-titulo-grande font-semibold">Entrar</h1>
+      <p className="mt-1 text-texto-sutil">
         Versão local, sem senha: escolha com qual colaborador quer usar o sistema.
       </p>
       {lista.length > 0 ? (
@@ -35,19 +37,21 @@ export default async function EscolherUsuario({
                 <input type="hidden" name="volta" value={volta} />
                 <button
                   type="submit"
-                  className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-left shadow-sm hover:border-slate-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+                  className={`w-full rounded-lg bg-superficie-elevada px-4 py-3 text-left shadow-elevada hover:bg-fundo-selecionado ${CLASSE_FOCO}`}
                 >
-                  <span className="block font-medium">{usuario.nome}</span>
-                  <span className="block text-sm text-slate-600">{usuario.setor}</span>
+                  <span className="block font-semibold">{usuario.nome}</span>
+                  <span className="block text-texto-sutil">{usuario.setor}</span>
                 </button>
               </form>
             </li>
           ))}
         </ul>
       ) : (
-        <p role="alert" className="mt-6 rounded border border-amber-300 bg-amber-50 p-4">
-          Nenhum colaborador cadastrado. Rode <code>make seed</code> para carregar os dados de exemplo.
-        </p>
+        <div className="mt-6">
+          <MensagemSecao papel="alerta" titulo="Nenhum colaborador cadastrado">
+            Rode <code>make seed</code> para carregar os dados de exemplo.
+          </MensagemSecao>
+        </div>
       )}
     </section>
   );

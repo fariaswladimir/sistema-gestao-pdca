@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { CartaoIndicador } from "@/components/dominio/CartaoIndicador";
+import { MensagemSecao } from "@/components/ui/MensagemSecao";
 import { clienteApi } from "@/lib/api/cliente";
 
 const ENTRAR = "/entrar?volta=/meus-indicadores";
@@ -13,16 +14,16 @@ export default async function MeusIndicadores() {
   if (eu.response.status === 401) redirect(ENTRAR);
   if (!eu.data) {
     return (
-      <p role="alert" className="rounded border border-amber-300 bg-amber-50 p-4">
+      <MensagemSecao papel="alerta" titulo="Cadastro inativo">
         Seu usuário não tem cadastro ativo no sistema. Procure o escritório de gestão.
-      </p>
+      </MensagemSecao>
     );
   }
 
   return (
     <section>
-      <h1 className="text-2xl font-semibold">Meus indicadores</h1>
-      <p className="mt-1 text-slate-600">Olá, {eu.data.nome}.</p>
+      <h1 className="text-titulo-grande font-semibold">Meus indicadores</h1>
+      <p className="mt-1 text-texto-sutil">Olá, {eu.data.nome}.</p>
       {meus.data && meus.data.length > 0 ? (
         <div className="mt-6 grid gap-4">
           {meus.data.map((indicador) => (
@@ -30,7 +31,7 @@ export default async function MeusIndicadores() {
           ))}
         </div>
       ) : (
-        <p className="mt-6 text-slate-600">Você ainda não é responsável por nenhum indicador.</p>
+        <p className="mt-6 text-texto-sutil">Você ainda não é responsável por nenhum indicador.</p>
       )}
     </section>
   );

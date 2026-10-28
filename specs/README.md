@@ -38,7 +38,7 @@ O agente mantém esta seção atualizada; `make eap` gera `docs/eap.html` a part
 
 - Fatia: F01
 - Etapa: 1
-- Próximos passos: Revisar a spec F01 pelas diretrizes de versão (sem cenários de permissão) | Levar as questões [DECIDIR] da F01 ao dono do produto | Planejar a F01 após a aprovação
+- Próximos passos: Revisar a spec F01 pelas diretrizes de versão (sem cenários de permissão) | Levar as questões [DECIDIR] da F01 ao dono do produto | Telas da F01 (T9, T10) com os componentes de components/ui (padrão ADS)
 - Bloqueios: Decidir a partir de qual fatia entra o login (F02 ou F03) | Homologação adiada até haver servidor (T16)
 
 Etapas: 1 spec (`/nova-fatia`) · 2 plano (`/planejar-fatia`) · 3 implementação (`/implementar-fatia`) ·

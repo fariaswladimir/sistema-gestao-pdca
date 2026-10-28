@@ -26,6 +26,7 @@ trigger: always_on
 - Chamadas à API via cliente gerado do OpenAPI (`frontend/lib/api/`). Nunca `fetch` manual a rotas da API.
 - Componentes de domínio em `frontend/components/dominio/` (Farol, ArvoreIndicadores, EspinhaDePeixe...).
 - Acessibilidade: farol nunca só por cor; sempre ícone e texto.
+- Interface no método do Atlassian Design System, com tokens e componentes nossos: ver `25-interface.md`.
 
 ## Testes
 - Unitários junto ao domínio (`backend/tests/unit`), integração com banco real via Testcontainers.

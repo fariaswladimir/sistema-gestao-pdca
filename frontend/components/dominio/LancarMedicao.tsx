@@ -3,6 +3,8 @@
 import { useId, useState, useTransition } from "react";
 
 import { lancarMedicao } from "@/app/meus-indicadores/acoes";
+import { Botao } from "@/components/ui/Botao";
+import { Campo } from "@/components/ui/Campo";
 import { lerNumero, numero, periodo as formatarPeriodo } from "@/lib/formato";
 
 import { textoFarol } from "./Farol";
@@ -58,60 +60,51 @@ export function LancarMedicao({ indicadorId, periodoAtual, valorAtual }: Props) 
   }
 
   return (
-    <form onSubmit={enviar} className="mt-4 grid gap-3 sm:grid-cols-[auto_auto_1fr_auto] sm:items-end">
-      <label className="grid gap-1 text-sm" htmlFor={`${id}-periodo`}>
-        Período
-        <input
-          id={`${id}-periodo`}
-          type="month"
-          required
-          value={periodo}
-          onChange={(e) => {
-            setPeriodo(e.target.value);
-            setExigidaPelaApi(false);
-          }}
-          className="rounded border border-slate-300 px-2 py-1"
-        />
-      </label>
-      <label className="grid gap-1 text-sm" htmlFor={`${id}-valor`}>
-        Valor
-        <input
-          id={`${id}-valor`}
-          inputMode="decimal"
-          required
-          value={valor}
-          onChange={(e) => setValor(e.target.value)}
-          className="w-32 rounded border border-slate-300 px-2 py-1"
-        />
-      </label>
+    <form
+      onSubmit={enviar}
+      className="mt-4 grid gap-3 border-t border-borda pt-4 sm:grid-cols-[auto_auto_1fr_auto] sm:items-end"
+    >
+      <Campo
+        id={`${id}-periodo`}
+        rotulo="Período"
+        type="month"
+        required
+        value={periodo}
+        onChange={(e) => {
+          setPeriodo(e.target.value);
+          setExigidaPelaApi(false);
+        }}
+      />
+      <Campo
+        id={`${id}-valor`}
+        rotulo="Valor"
+        inputMode="decimal"
+        required
+        value={valor}
+        onChange={(e) => setValor(e.target.value)}
+        className="w-32"
+      />
       {pedeJustificativa ? (
-        <label className="grid gap-1 text-sm" htmlFor={`${id}-justificativa`}>
-          Justificativa da correção
-          <input
-            id={`${id}-justificativa`}
-            value={justificativa}
-            onChange={(e) => setJustificativa(e.target.value)}
-            maxLength={1000}
-            className="rounded border border-slate-300 px-2 py-1"
-          />
-        </label>
+        <Campo
+          id={`${id}-justificativa`}
+          rotulo="Justificativa da correção"
+          value={justificativa}
+          onChange={(e) => setJustificativa(e.target.value)}
+          maxLength={1000}
+        />
       ) : (
         <span />
       )}
-      <button
-        type="submit"
-        disabled={enviando}
-        className="rounded bg-slate-900 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
-      >
+      <Botao type="submit" aparencia="primaria" disabled={enviando}>
         {enviando ? "Lançando…" : "Lançar"}
-      </button>
-      <p aria-live="polite" className="text-sm sm:col-span-4">
+      </Botao>
+      <p aria-live="polite" className="sm:col-span-4">
         {erro && (
-          <span role="alert" className="text-red-700">
+          <span role="alert" className="text-perigo-texto">
             {erro}
           </span>
         )}
-        {aviso && <span className="text-green-800">{aviso}</span>}
+        {aviso && <span className="text-sucesso-texto">{aviso}</span>}
       </p>
     </form>
   );
