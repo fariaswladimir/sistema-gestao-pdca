@@ -42,3 +42,4 @@
 | 2026-10-28 | Realm de homologação separado, com marcadores `${...}`; usuários de demonstração entram com senha inicial e `requiredActions: UPDATE_PASSWORD`. | Sem senhas no repositório; na importação o Keycloak ignora `temporary` da credencial, só a ação requerida força a troca. |
 | 2026-10-28 | `deploy-homologacao` só roda com a variável `HOMOLOG_ATIVA=true` e runner com rótulo `homologacao`; o mesmo `infra/homolog/implantar.sh` serve ao job e à operação manual. | Sem a variável o job ficaria na fila esperando um runner inexistente. |
 | 2026-10-28 | Monitores do Uptime Kuma configurados à mão (roteiro no README). | A versão 1.x não tem configuração declarativa nem API REST. |
+| 2026-10-28 | Realm de dev com ids fixos de usuário. | Recriar o contêiner do Keycloak (H2 do modo dev) gerava outro `sub`; a API, corretamente, recusava revincular o e-mail e o ambiente local quebrava. |

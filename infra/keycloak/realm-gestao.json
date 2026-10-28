@@ -63,6 +63,7 @@
   ],
   "users": [
     {
+      "id": "00000000-0000-4000-8000-000000000001",
       "username": "ana",
       "email": "ana@exemplo.org",
       "emailVerified": true,
@@ -78,6 +79,7 @@
       ]
     },
     {
+      "id": "00000000-0000-4000-8000-000000000002",
       "username": "bruno",
       "email": "bruno@exemplo.org",
       "emailVerified": true,
@@ -93,6 +95,7 @@
       ]
     },
     {
+      "id": "00000000-0000-4000-8000-000000000003",
       "username": "carlos",
       "email": "carlos@exemplo.org",
       "emailVerified": true,
@@ -108,6 +111,7 @@
       ]
     },
     {
+      "id": "00000000-0000-4000-8000-000000000004",
       "username": "duda",
       "email": "duda@exemplo.org",
       "emailVerified": true,
@@ -123,6 +127,7 @@
       ]
     },
     {
+      "id": "00000000-0000-4000-8000-000000000005",
       "username": "eva",
       "email": "eva@exemplo.org",
       "emailVerified": true,
@@ -138,6 +143,7 @@
       ]
     },
     {
+      "id": "00000000-0000-4000-8000-000000000006",
       "username": "root",
       "email": "root@exemplo.org",
       "emailVerified": true,
