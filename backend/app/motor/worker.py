@@ -1,8 +1,10 @@
 """Worker da fila (`fila_tarefa`). Vários workers podem rodar juntos: cada tarefa é travada (SKIP LOCKED)."""
 
 import asyncio
+import os
 from collections.abc import Awaitable, Callable
 from datetime import timedelta
+from pathlib import Path
 from typing import Any
 
 import structlog
@@ -18,6 +20,8 @@ from app.modelos import FilaTarefa
 Tratador = Callable[[AsyncSession, dict[str, Any]], Awaitable[None]]
 TRATADORES: dict[str, Tratador] = {}
 MAX_TENTATIVAS = 5
+# Batimento: tocado a cada volta do laço; o healthcheck do contêiner exige que seja recente.
+ARQUIVO_BATIMENTO = Path(os.environ.get("WORKER_BATIMENTO", "/tmp/worker-batimento"))
 
 log = structlog.get_logger()
 
@@ -77,6 +81,7 @@ async def rodar(intervalo_s: float = 2.0, espera_falha_s: float = 5.0) -> None:
     log.info("worker_iniciado")
     try:
         while True:
+            await asyncio.to_thread(ARQUIVO_BATIMENTO.touch)
             try:
                 processadas = await processar_lote(fabrica)
             except Exception:

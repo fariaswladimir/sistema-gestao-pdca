@@ -55,7 +55,12 @@ services:
     env_file: .env
     depends_on:
       db: {condition: service_healthy}
-    healthcheck: {disable: true}
+    healthcheck:
+      # vivo = batimento do laço com menos de 60 s (o laço dorme no máximo 5 s)
+      test: ["CMD", "python", "-c", "import os,sys,time; sys.exit(time.time() - os.path.getmtime('/tmp/worker-batimento') > 60)"]
+      interval: 10s
+      retries: 3
+      start_period: 10s
 
   web:
     restart: unless-stopped

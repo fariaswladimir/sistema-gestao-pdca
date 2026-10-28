@@ -1,5 +1,6 @@
 import asyncio
 from collections.abc import Iterator
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -71,7 +72,7 @@ def test_falha_no_tratador_reagenda_a_tarefa(
     assert _processar(url_banco) == 0  # reagendada para depois
 
 
-def test_worker_sobrevive_a_banco_sem_migracao(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_worker_sobrevive_a_banco_sem_migracao(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """No primeiro `up`, o worker sobe antes das migrações: deve registrar o erro e continuar."""
     chamadas = 0
 
@@ -82,7 +83,10 @@ def test_worker_sobrevive_a_banco_sem_migracao(monkeypatch: pytest.MonkeyPatch) 
             raise asyncio.CancelledError
         raise RuntimeError("relation fila_tarefa does not exist")
 
+    batimento = tmp_path / "batimento"
     monkeypatch.setattr(worker, "processar_lote", falhar)
+    monkeypatch.setattr(worker, "ARQUIVO_BATIMENTO", batimento)
     with pytest.raises(asyncio.CancelledError):
         asyncio.run(worker.rodar(espera_falha_s=0))
     assert chamadas == 3
+    assert batimento.exists()  # healthcheck do contêiner continua vendo o worker vivo
